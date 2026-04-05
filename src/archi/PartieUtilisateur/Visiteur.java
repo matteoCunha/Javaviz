@@ -1,12 +1,12 @@
 package archi.PartieUtilisateur;
 
 public class Visiteur extends User{
-    int compteurEcoute;
-    int maxEcoute;
+    private int compteurEcoute = 0;
 
-    public Visiteur(String pseudo) {
-        super(pseudo);
-        this.compteurEcoute = 0;
-        this.maxEcoute = 5;
+    public Visiteur() {
+        super("Invité");
     }
+
+    public void incrementerEcoute() { this.compteurEcoute++; }
+    public int getCompteurEcoute() { return compteurEcoute; }
 }

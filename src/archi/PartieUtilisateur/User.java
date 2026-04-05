@@ -7,4 +7,5 @@ public class User {
     String password;
     Date lastConnection;
 
+    public User(String pseudo, String p) { this.pseudo = pseudo; this.password = p;}
 }

@@ -21,6 +21,9 @@ public class Morceau implements Consultable {
         this.genre = genre;
     }
 
+    public void ajouterEcoute() { this.nb_ecoutes++; }
+
+    @Override
     public void consulterElement() {
         if(this.group == null){
             System.out.println("Morceau: \n\t- Artiste : " + this.artiste.pseudo + "\n\t- Date de publication : " + this.dateSortie + "\n\t- Genre : " + this.genre + "\n\t- Duree : " + this.temps);

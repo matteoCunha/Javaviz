@@ -1,5 +1,10 @@
 package archi.interfaces;
 
+import archi.PartieMusique.SequenceDeMusique;
+
 public interface Consultable {
-    public void consulterElement();
+    public String getHeaderTitle();
+    public String getSubtitle();
+    public String getDescription();
+    public SequenceDeMusique getElements();
 }

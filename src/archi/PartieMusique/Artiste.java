@@ -14,4 +14,7 @@ public class Artiste {
     }
 
     public String getPseudo() { return pseudo; }
+
+    // ------------ Partie interface Consultable -------------------
+
 }

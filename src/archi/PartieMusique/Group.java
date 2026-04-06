@@ -13,6 +13,7 @@ public class Group implements Consultable {
 
     public String getName() { return name; }
 
+    // ------------ Partie interface Consultable -------------------
     @Override
     public String getHeaderTitle(){ return this.getName();}
 

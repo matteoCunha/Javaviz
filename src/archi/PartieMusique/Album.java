@@ -13,6 +13,7 @@ public class Album implements Consultable {
     Group group;
 
 
+    // ------------ Partie interface Consultable -------------------
     @Override
     public String getHeaderTitle(){ return this.name;}
 

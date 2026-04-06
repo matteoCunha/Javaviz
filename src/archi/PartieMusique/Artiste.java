@@ -1,10 +1,10 @@
 package archi.PartieMusique;
 
 public class Artiste {
-    int id;
-    String pseudo;
-    String description;
-    int dateNaissance;
+    private int id;
+    private String pseudo;
+    private String description;
+    private int dateNaissance;
 
     public Artiste(int id, String pseudo, String desc, int dateNaissance) {
         this.id = id;
@@ -12,4 +12,6 @@ public class Artiste {
         this.description = desc;
         this.dateNaissance = dateNaissance;
     }
+
+    public String getPseudo() { return pseudo; }
 }

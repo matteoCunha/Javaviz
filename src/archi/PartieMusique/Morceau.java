@@ -4,7 +4,7 @@ import archi.interfaces.Consultable;
 
 import java.util.Date;
 
-public class Morceau implements Consultable {
+public class Morceau {
     private int id;
     private Date dateSortie;
     private Artiste artiste;
@@ -12,6 +12,7 @@ public class Morceau implements Consultable {
     private int temps;
     private String genre;
     private int nb_ecoutes;
+    private String titre;
 
     public Morceau(int id, Date dateSortie, Artiste artiste, int temps, String genre) {
         this.id = id;
@@ -23,12 +24,4 @@ public class Morceau implements Consultable {
 
     public void ajouterEcoute() { this.nb_ecoutes++; }
 
-    @Override
-    public void consulterElement() {
-        if(this.group == null){
-            System.out.println("Morceau: \n\t- Artiste : " + this.artiste.pseudo + "\n\t- Date de publication : " + this.dateSortie + "\n\t- Genre : " + this.genre + "\n\t- Duree : " + this.temps);
-        } else if (this.artiste == null) {
-            System.out.println("Morceau: \n\t- Group : " + this.group.name + "\n\t- Date de publication : " + this.dateSortie + "\n\t- Genre : " + this.genre + "\n\t- Duree : " + this.temps);
-        }
-    }
 }

@@ -10,6 +10,12 @@ public class Group implements Consultable {
     private String description;
     private String name;
 
+    public Group(int id, Date dateCreation, String description, String name) {
+        this.id = id;
+        this.dateCreation = dateCreation;
+        this.description = description;
+        this.name = name;
+    }
 
     public String getName() { return name; }
 

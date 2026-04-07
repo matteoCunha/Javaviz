@@ -1,16 +1,38 @@
 package archi.PartieMusique;
 
 import archi.interfaces.Consultable;
+import archi.interfaces.Recherchable;
 
 import java.util.Date;
 
-public class Album implements Consultable {
-    int id;
-    Date dateCreation;
-    String description;
-    String name;
-    Artiste artiste;
-    Group group;
+public class Album implements Consultable, Recherchable {
+    private int id;
+    private Date dateCreation;
+    private String description;
+    private String name;
+    private Artiste artiste;
+    private Group group;
+
+    public Album(int id, Date dateCreation, String description, String name, Artiste artiste) {
+        this.id = id;
+        this.dateCreation = dateCreation;
+        this.description = description;
+        this.name = name;
+        this.artiste = artiste;
+    }
+
+    public Album(int id, Date dateCreation, String description, String name, Group group) {
+        this.id = id;
+        this.dateCreation = dateCreation;
+        this.description = description;
+        this.name = name;
+        this.group = group;
+    }
+
+    public String getName() { return this.name; }
+    public String getArtistName() { if(this.artiste != null) { return this.artiste.getPseudo(); } return ""; }
+    public String getGroupName() { if(this.group != null) { return this.group.getName(); } return ""; }
+
 
 
     // ------------ Partie interface Consultable -------------------
@@ -22,7 +44,7 @@ public class Album implements Consultable {
         if (this.artiste != null) { return "Artiste : " + this.artiste.getPseudo(); }
         else if (this.group != null) { return "Group : " + this.group.getName(); }
 
-        return "Artiste/groupe inconnus";
+        return "Inconnu";
     }
 
     @Override
@@ -30,4 +52,19 @@ public class Album implements Consultable {
 
     @Override
     public SequenceDeMusique getElements(){ return new SequenceDeMusique();}
+
+
+    //----- Interface Recherchable --------
+    @Override
+    public String getSearchTitle() {
+        if (artiste != null) {
+            return this.getName() + "-" + this.getArtistName();
+        } else if (group != null) {
+            return this.getName() + "-" + this.getGroupName();
+        }
+        return "";
+    }
+
+    @Override
+    public String getSearchSubtitle(){ return "Morceau"; }
 }

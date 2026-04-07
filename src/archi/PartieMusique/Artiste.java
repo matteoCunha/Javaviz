@@ -1,6 +1,8 @@
 package archi.PartieMusique;
 
-public class Artiste {
+import archi.interfaces.Consultable;
+
+public class Artiste implements Consultable {
     private int id;
     private String pseudo;
     private String description;
@@ -16,5 +18,15 @@ public class Artiste {
     public String getPseudo() { return pseudo; }
 
     // ------------ Partie interface Consultable -------------------
+    @Override
+    public String getHeaderTitle(){ return this.getPseudo();}
 
+    @Override
+    public String getSubtitle(){ return "Artiste";}
+
+    @Override
+    public String getDescription(){ return this.description;}
+
+    @Override
+    public SequenceDeMusique getElements(){ return new SequenceDeMusique();}
 }

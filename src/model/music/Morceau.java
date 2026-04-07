@@ -1,4 +1,4 @@
-package model.PartieMusique;
+package model.music;
 
 import model.interfaces.Recherchable;
 

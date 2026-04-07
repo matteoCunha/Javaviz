@@ -1,4 +1,4 @@
-package model.PartieMusique;
+package model.music;
 
 //implémentation doublyLinkedList qui va servir pour les albums et les playlists
 public class SequenceDeMusique {

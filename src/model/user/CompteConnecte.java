@@ -1,4 +1,4 @@
-package model.PartieUtilisateur;
+package model.user;
 
 public abstract class CompteConnecte extends User{
     protected int id;

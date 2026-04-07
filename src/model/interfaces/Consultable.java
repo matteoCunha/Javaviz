@@ -1,6 +1,6 @@
-package archi.interfaces;
+package model.interfaces;
 
-import archi.PartieMusique.SequenceDeMusique;
+import model.music.SequenceDeMusique;
 
 public interface Consultable {
     public String getHeaderTitle();

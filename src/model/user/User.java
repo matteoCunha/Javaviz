@@ -1,4 +1,4 @@
-package model.PartieUtilisateur;
+package model.user;
 
 import model.interfaces.Consultable;
 

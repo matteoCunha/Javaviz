@@ -1,4 +1,4 @@
-package archi.interfaces;
+package model.interfaces;
 
 public interface Recherchable {
     public String getSearchTitle();

@@ -1,6 +1,6 @@
-package model.PartieMusique;
+package model.music;
 
-import model.PartieUtilisateur.User;
+import model.user.User;
 
 public class Playlist {
     int id;

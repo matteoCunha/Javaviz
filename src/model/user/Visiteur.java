@@ -1,4 +1,4 @@
-package model.PartieUtilisateur;
+package model.user;
 
 public class Visiteur extends User{
     private int compteurEcoute = 0;

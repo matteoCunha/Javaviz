@@ -1,6 +1,6 @@
-package model.PartieUtilisateur;
+package model.user;
 
-import model.PartieMusique.Playlist;
+import model.music.Playlist;
 
 public class Abonne extends CompteConnecte {
     Playlist[] playlist;

@@ -1,6 +1,6 @@
-package archi.PartieMusique;
+package model.PartieMusique;
 
-import archi.interfaces.Consultable;
+import model.interfaces.Consultable;
 
 import java.util.Date;
 

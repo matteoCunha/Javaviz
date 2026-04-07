@@ -1,6 +1,6 @@
-package archi.PartieUtilisateur;
+package model.PartieUtilisateur;
 
-import archi.PartieMusique.Playlist;
+import model.PartieMusique.Playlist;
 
 public class Abonne extends CompteConnecte {
     Playlist[] playlist;

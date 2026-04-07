@@ -1,6 +1,6 @@
-package archi.PartieMusique;
+package model.PartieMusique;
 
-import archi.interfaces.Consultable;
+import model.interfaces.Consultable;
 
 public class Artiste implements Consultable {
     private int id;

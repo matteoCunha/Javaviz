@@ -1,8 +1,6 @@
-package archi.PartieUtilisateur;
+package model.PartieUtilisateur;
 
-import archi.interfaces.Consultable;
-
-import java.util.Date;
+import model.interfaces.Consultable;
 
 public abstract class User {
     protected String pseudo;

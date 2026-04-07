@@ -1,6 +1,6 @@
-package archi.PartieMusique;
+package model.PartieMusique;
 
-import archi.PartieUtilisateur.User;
+import model.PartieUtilisateur.User;
 
 public class Playlist {
     int id;

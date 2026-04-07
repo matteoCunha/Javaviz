@@ -1,4 +1,4 @@
-package archi.PartieMusique;
+package model.PartieMusique;
 
 //implémentation doublyLinkedList qui va servir pour les albums et les playlists
 public class SequenceDeMusique {

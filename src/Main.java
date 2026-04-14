@@ -1,4 +1,9 @@
+import model.music.Album;
+import model.music.Morceau;
+import model.repository.ArtistRepository;
 import model.repository.DatabaseConnection;
+import model.repository.MorceauRepository;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,15 +14,12 @@ public class Main {
         try (Connection conn = DatabaseConnection.getConnection()) {
 
             System.out.println("La base de données est prête à recevoir des requêtes SQL.");
-            PreparedStatement queryAllMorceaux = conn.prepareStatement("SELECT * FROM morceau");
-            ResultSet resultats = queryAllMorceaux.executeQuery();
-            System.out.println(resultats);
+            MorceauRepository m = new MorceauRepository(conn);
+            Morceau gims = m.fetchByName("PARISIENNE");
+            System.out.println("Test morceau " + gims.getAutorName()); //doit renvoyer inconnu car dans l'implémentaiton quand artiste ou group n'est pas trouvé dans la classe cela renvoie inconnu par défaut
 
-            boolean encore = resultats.next();
-            while(encore) {
-                System.out.println(resultats.getString(1) + ":" + resultats.getString(2) + ":" + resultats.getString(3) + "-" + resultats.getString(9));
-                encore = resultats.next();
-            }
+            ArtistRepository a = new ArtistRepository(conn);
+            a.fetchAll();
 
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");

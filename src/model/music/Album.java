@@ -68,3 +68,14 @@ public class Album implements Consultable, Recherchable {
     @Override
     public String getSearchSubtitle(){ return "Morceau"; }
 }
+
+
+/*
+Dans la base de donnée (index des colonnes commence à 1 pas a 0) :
+1 - id
+2 - date_creation
+3 - description
+4 - name
+5 - artiste_id (peut être nul) soit un artiste soit un groupe
+6 - group_id (peut être nul)
+ */

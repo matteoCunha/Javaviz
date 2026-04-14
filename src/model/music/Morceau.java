@@ -41,7 +41,6 @@ public class Morceau implements Recherchable {
         return "Inconnu";
     }
 
-
     //----- Interface Recherchable --------
     @Override
     public String getSearchTitle() { return this.getTitre() + "-" + this.getAutorName(); }
@@ -49,3 +48,17 @@ public class Morceau implements Recherchable {
     @Override
     public String getSearchSubtitle(){ return "Morceau"; }
 }
+
+
+/*
+Dans la base de donnée (index des colonnes commence à 1 pas a 0) :
+1 - id
+2 - date_sortie
+3 - temps
+4 - genre
+5 - album_id (peut être nul)
+6 - artiste_id
+7 - nb_ecoutes
+8 - numero_piste (sert pour les playlists, peut être null donc)
+9 - titre (nom du morceau)
+ */

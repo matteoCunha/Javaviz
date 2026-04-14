@@ -30,3 +30,13 @@ public class Artiste implements Consultable {
     @Override
     public SequenceDeMusique getElements(){ return new SequenceDeMusique();}
 }
+
+
+/*
+Dans la base de donnée (index des colonnes commence à 1 pas a 0) :
+1 - id
+2 - pseudo
+3 - description
+4 - group_id (peut être nul)
+5 - birth_date (peut être nul)
+ */

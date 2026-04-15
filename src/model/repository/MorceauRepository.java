@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MorceauRepository {
     protected Connection conn;
@@ -28,6 +30,15 @@ public class MorceauRepository {
         else { m = new Morceau(rs.getInt("id"), dateSortie, (Group) null, rs.getInt(3), rs.getString("titre"), rs.getString("titre")); }
 
         rs.close();
+        return m;
+    }
+
+    public Morceau createMorceau(ResultSet rs) throws SQLException {
+        java.sql.Date sqlDate = rs.getDate("date_sortie");
+        LocalDate dateSortie = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+        Morceau m;
+        if (rs.getInt("id") != 0) { m = new Morceau(rs.getInt("id"), dateSortie, (Artiste) null, rs.getInt("temps"), rs.getString("titre"), rs.getString(3)); }
+        else { m = new Morceau(rs.getInt("id"), dateSortie, (Group) null, rs.getInt(3), rs.getString("titre"), rs.getString("titre")); }
         return m;
     }
 
@@ -51,11 +62,22 @@ public class MorceauRepository {
         q.setString(1, name);
         return createMorceau(q);
     }
+
+    public List<Morceau> fetchByName(String name, int limit) throws SQLException{
+        String query = "SELECT * FROM morceau WHERE titre ILIKE ? LIMIT ?";
+        PreparedStatement q = conn.prepareStatement(query);
+        q.setString(1, "%" + name + "%"); q.setInt(2, limit);
+        ResultSet rs = q.executeQuery();
+
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceau(rs)); }
+        return list;
+    }
 }
 
 
 /*
 TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)
- */
+*/
 
 //TODO test branch

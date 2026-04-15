@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistRepository {
     Connection conn;
@@ -43,6 +44,18 @@ public class ArtistRepository {
     }
 
     public Artiste fetchByI (int id) { return null; }
+
+    public List<Artiste> searchByName (String name, int limit) throws SQLException{
+        String query = "SELECT * FROM artiste WHERE pseudo ILIKE ? LIMIT ?";
+        PreparedStatement q = conn.prepareStatement(query);
+        q.setString(1, "%" + name + "%"); q.setInt(2, limit);
+
+        ResultSet rs = q.executeQuery();
+        List<Artiste> list = new ArrayList<>();
+
+        while (rs.next()) { list.add(createArtist(rs)); }
+        return list;
+    }
 }
 
 //TODO conversion DATE, java ne comprends pas le format de la db (juste une conversion à faire

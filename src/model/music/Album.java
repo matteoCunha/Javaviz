@@ -67,6 +67,9 @@ public class Album implements Consultable, Recherchable {
 
     @Override
     public String getSearchSubtitle(){ return "Morceau"; }
+
+    @Override
+    public String getContent() { return getSearchTitle() + " - " + getSearchSubtitle(); }
 }
 
 

@@ -51,6 +51,9 @@ public class Morceau implements Recherchable {
 
     @Override
     public String getSearchSubtitle(){ return "Morceau"; }
+
+    @Override
+    public String getContent() {return getSearchTitle() + " - " + getSearchSubtitle(); }
 }
 
 

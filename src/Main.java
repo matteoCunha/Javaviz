@@ -3,6 +3,7 @@ import model.music.Morceau;
 import model.repository.ArtistRepository;
 import model.repository.DatabaseConnection;
 import model.repository.MorceauRepository;
+import model.repository.SearchResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,16 +13,26 @@ import java.sql.PreparedStatement;
 public class Main {
     public static void main(String[] args) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-
             System.out.println("La base de données est prête à recevoir des requêtes SQL.");
             MorceauRepository m = new MorceauRepository(conn);
+            ArtistRepository a = new ArtistRepository(conn);
             Morceau gims = m.fetchByName("PARISIENNE");
             System.out.println("Test morceau " + gims.getAutorName()); //doit renvoyer inconnu car dans l'implémentaiton quand artiste ou group n'est pas trouvé dans la classe cela renvoie inconnu par défaut
 
             PreparedStatement p = conn.prepareStatement("SELECT * FROM morceau WHERE titre ILIKE ?");
             p.setString(1, "%pari%");
             ResultSet rs = p.executeQuery(); rs.next();
+
             System.out.println(rs.getString("titre") + " - " + rs.getInt("id"));
+            boolean encore = rs.next();
+            while(encore) {
+                System.out.println(rs.getString("titre") + " - " + rs.getInt("id"));
+                encore = rs.next();
+            }
+
+            SearchResult s = new SearchResult(m, a);
+            s.globalSearch("te");
+
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");
             e.printStackTrace();

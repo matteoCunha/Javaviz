@@ -2,11 +2,12 @@ package model.music;
 
 import model.interfaces.Recherchable;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Morceau implements Recherchable {
     private int id;
-    private Date dateSortie;
+    private LocalDate dateSortie;
     private Artiste artiste;
     private Group group;
     private int temps;
@@ -15,20 +16,22 @@ public class Morceau implements Recherchable {
     private int numero_piste;
     private String titre;
 
-    public Morceau(int id, Date dateSortie, Artiste artiste, int temps, String genre) {
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.artiste = artiste;
         this.temps = temps;
         this.genre = genre;
+        this.titre = titre;
     }
 
-    public Morceau(int id, Date dateSortie, Group group, int temps, String genre) {
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.group = group;
         this.temps = temps;
         this.genre = genre;
+        this.titre = titre;
     }
 
     public void ajouterEcoute() { this.nb_ecoutes++; }

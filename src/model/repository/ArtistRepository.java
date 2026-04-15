@@ -39,9 +39,14 @@ public class ArtistRepository {
             array.add(createArtist(rs));
             encore = rs.next();
         }
+        rs.close();
     }
+
     public Artiste fetchByI (int id) { return null; }
 }
 
 //TODO conversion DATE, java ne comprends pas le format de la db (juste une conversion à faire
 
+/*
+TODO : implémenter une fonction recherche
+ */

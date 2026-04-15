@@ -18,9 +18,10 @@ public class Main {
             Morceau gims = m.fetchByName("PARISIENNE");
             System.out.println("Test morceau " + gims.getAutorName()); //doit renvoyer inconnu car dans l'implémentaiton quand artiste ou group n'est pas trouvé dans la classe cela renvoie inconnu par défaut
 
-            ArtistRepository a = new ArtistRepository(conn);
-            a.fetchAll();
-
+            PreparedStatement p = conn.prepareStatement("SELECT * FROM morceau WHERE titre ILIKE ?");
+            p.setString(1, "%pari%");
+            ResultSet rs = p.executeQuery(); rs.next();
+            System.out.println(rs.getString("titre") + " - " + rs.getInt("id"));
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");
             e.printStackTrace();

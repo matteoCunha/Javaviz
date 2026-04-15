@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class MorceauRepository {
@@ -18,11 +19,14 @@ public class MorceauRepository {
     public Morceau createMorceau(PreparedStatement q) throws SQLException {
         ResultSet rs = q.executeQuery();
         rs.next();
+        java.sql.Date sqlDate = rs.getDate("date_sortie");
+        LocalDate dateSortie = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+
         System.out.println("Morceau trouvé : \n\t-Titre : " + rs.getString(9)
-                +"\n\t-Date sortie : " + rs.getDate(2) + "\n\t-Genre : " + rs.getString(4));
+                +"\n\t-Date sortie : " + dateSortie + "\n\t-Genre : " + rs.getString(4));
         Morceau m;
-        if (rs.getInt(6) != 0) { m = new Morceau(rs.getInt(1), (Date) rs.getDate(2), (Artiste) null, rs.getInt(3), rs.getString(3)); }
-        else { m = new Morceau(rs.getInt(1), (Date) rs.getDate(2), (Group) null, rs.getInt(3), rs.getString(3)); }
+        if (rs.getInt("id") != 0) { m = new Morceau(rs.getInt("id"), dateSortie, (Artiste) null, rs.getInt("temps"), rs.getString("titre"), rs.getString(3)); }
+        else { m = new Morceau(rs.getInt("id"), dateSortie, (Group) null, rs.getInt(3), rs.getString("titre"), rs.getString("titre")); }
 
         rs.close();
         return m;
@@ -49,3 +53,8 @@ public class MorceauRepository {
         return createMorceau(q);
     }
 }
+
+
+/*
+TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)
+ */

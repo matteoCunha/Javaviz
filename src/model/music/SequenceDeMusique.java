@@ -87,3 +87,4 @@ public class SequenceDeMusique {
         n.next = null; n.prev = null;
     }
 }
+//TODO : Ajouter fonction pour bouger un morceau de place (utiliser les numero_piste dans la classe Morceau)

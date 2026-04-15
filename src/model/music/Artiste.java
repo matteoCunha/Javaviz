@@ -2,20 +2,23 @@ package model.music;
 
 import model.interfaces.Consultable;
 
+import java.time.LocalDate;
+
 public class Artiste implements Consultable {
     private int id;
     private String pseudo;
     private String description;
-    private int dateNaissance;
+    private LocalDate dateNaissance;
 
-    public Artiste(int id, String pseudo, String desc, int dateNaissance) {
+    public Artiste(int id, String pseudo, String desc, LocalDate dateNaissance) {
         this.id = id;
         this.pseudo = pseudo;
         this.description = desc;
         this.dateNaissance = dateNaissance;
     }
 
-    public String getPseudo() { return pseudo; }
+    public String getPseudo() { return this.pseudo; }
+    public int getId() { return this.id; }
 
     // ------------ Partie interface Consultable -------------------
     @Override

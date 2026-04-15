@@ -12,6 +12,7 @@ public class Morceau implements Recherchable {
     private int temps;
     private String genre;
     private int nb_ecoutes;
+    private int numero_piste;
     private String titre;
 
     public Morceau(int id, Date dateSortie, Artiste artiste, int temps, String genre) {

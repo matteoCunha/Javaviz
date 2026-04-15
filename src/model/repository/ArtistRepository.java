@@ -6,21 +6,37 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class ArtistRepository {
     Connection conn;
 
     public ArtistRepository (Connection c) { this.conn = c; }
 
+    public Artiste createArtist(ResultSet rs) throws SQLException{
+        int id = rs.getInt("id");
+        String pseudo = rs.getString("pseudo");
+        String description = rs.getString("description");
+        java.sql.Date sqlDate = rs.getDate("birth_date");
+        LocalDate birthDate = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+
+        return new Artiste(id, pseudo, description, birthDate);
+    }
+
     public void fetchAll() throws SQLException {
         String query = "SELECT * FROM artiste";
         PreparedStatement p = conn.prepareStatement(query);
         ResultSet rs = p.executeQuery();
-
+        ArrayList<Artiste> array = new ArrayList<Artiste>();
         boolean encore = rs.next();
         while(encore) {
+            java.sql.Date sqlDate = rs.getDate("birth_date");
+            LocalDate birthDate = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+
             System.out.println("Artiste trouvé (ID " + rs.getInt(1) + "): \n\t-Pseudo : " + rs.getString(2)
-                    +"\n\t-Date de naissance : " + rs.getDate(5) + "\n\t-Description : " + rs.getString(3));
+                    +"\n\t-Date de naissance : " + birthDate + "\n\t-Description : " + rs.getString(3));
+            array.add(createArtist(rs));
             encore = rs.next();
         }
     }

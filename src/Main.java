@@ -1,9 +1,6 @@
 import model.music.Album;
 import model.music.Morceau;
-import model.repository.ArtistRepository;
-import model.repository.DatabaseConnection;
-import model.repository.MorceauRepository;
-import model.repository.SearchResult;
+import model.repository.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,6 +13,7 @@ public class Main {
             System.out.println("La base de données est prête à recevoir des requêtes SQL.");
             MorceauRepository m = new MorceauRepository(conn);
             ArtistRepository a = new ArtistRepository(conn);
+            AlbumRepository alb = new AlbumRepository(conn);
             Morceau gims = m.fetchByName("PARISIENNE");
             System.out.println("Test morceau " + gims.getAutorName()); //doit renvoyer inconnu car dans l'implémentaiton quand artiste ou group n'est pas trouvé dans la classe cela renvoie inconnu par défaut
 
@@ -30,8 +28,8 @@ public class Main {
                 encore = rs.next();
             }
 
-            SearchResult s = new SearchResult(m, a);
-            s.globalSearch("te");
+            SearchResult s = new SearchResult(m, a, alb);
+            s.globalSearch("Bo");
 
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");

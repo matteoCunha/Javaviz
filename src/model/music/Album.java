@@ -4,7 +4,6 @@ import model.interfaces.Consultable;
 import model.interfaces.Recherchable;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Album implements Consultable, Recherchable {
     private int id;
@@ -59,15 +58,15 @@ public class Album implements Consultable, Recherchable {
     @Override
     public String getSearchTitle() {
         if (artiste != null) {
-            return this.getName() + "-" + this.getArtistName();
+            return this.getName() + " - " + this.getArtistName();
         } else if (group != null) {
-            return this.getName() + "-" + this.getGroupName();
+            return this.getName() + " - " + this.getGroupName();
         }
         return "";
     }
 
     @Override
-    public String getSearchSubtitle(){ return "Morceau"; }
+    public String getSearchSubtitle(){ return "Album"; }
 
     @Override
     public String getContent() { return getSearchTitle() + " - " + getSearchSubtitle(); }
@@ -80,6 +79,8 @@ Dans la base de donnée (index des colonnes commence à 1 pas a 0) :
 2 - date_creation
 3 - description
 4 - name
-5 - artiste_id (peut être nul) soit un artiste soit un groupe
-6 - group_id (peut être nul)
+5 - artiste_id (peut être nul) soit un artiste, soit un groupe
+6 - group_id (peut être nul).
  */
+
+//TODO : idée pour les playlist garder les listes chainées (simple pour utiliser le bouton suivant/précédent plus tard dans l'inteface graphique) et utilisation de arrayLists pour les albums (rapide pour display avec une itération).

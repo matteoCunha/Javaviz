@@ -2,6 +2,7 @@ package model.repository;
 
 import model.music.Album;
 import model.music.Artiste;
+import model.music.Group;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,15 +24,16 @@ public class AlbumRepository {
         java.sql.Date sqlDate = rs.getDate("date_creation");
         LocalDate date = (sqlDate != null) ? sqlDate.toLocalDate() : null;
         int artisteId = rs.getInt("artiste_id");
-        if(!rs.wasNull()) {
+        if (!rs.wasNull()) {
             ArtistRepository art = new ArtistRepository(conn);
             Artiste artiste = art.fetchById(artisteId);
-            return new Album(id, date, desc, name, artiste);
+            return new Album(id, date, desc, name, artiste, new MorceauRepository(conn));
         }
 
         int groupId = rs.getInt("group_id");
-        //TODO : implémenter fonction avec GroupRepostory (pas encore fait)
-        return null;
+        GroupRepository groupRepository = new GroupRepository(conn);
+        Group group = groupRepository.fetchById(groupId);
+        return new Album(id, date, desc, name, group, new MorceauRepository(conn));
     }
 
     public Album fetchById(int id) throws SQLException {

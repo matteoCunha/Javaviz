@@ -31,6 +31,9 @@ public class Main {
             SearchResult s = new SearchResult(m, a, alb);
             s.globalSearch("Bo");
 
+            Album test = alb.fetchById(1);
+            test.printAlbum();
+
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");
             e.printStackTrace();

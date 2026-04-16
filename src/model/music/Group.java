@@ -2,15 +2,15 @@ package model.music;
 
 import model.interfaces.Consultable;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Group implements Consultable {
     private int id;
-    private Date dateCreation;
+    private LocalDate dateCreation;
     private String description;
     private String name;
 
-    public Group(int id, Date dateCreation, String description, String name) {
+    public Group(int id, LocalDate dateCreation, String description, String name) {
         this.id = id;
         this.dateCreation = dateCreation;
         this.description = description;
@@ -32,3 +32,10 @@ public class Group implements Consultable {
     @Override
     public SequenceDeMusique getElements(){ return new SequenceDeMusique();}
 }
+/*
+champ de group :
+- id
+- date_creation
+- name
+- description
+ */

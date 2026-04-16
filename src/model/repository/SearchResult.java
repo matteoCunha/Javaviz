@@ -26,11 +26,11 @@ public class SearchResult {
         List<Artiste> artistes = a.searchByName(query, 3);
 
         for (Morceau morceau : morceaux) {
-            System.out.println(morceau.getContent() + "\n");
+            System.out.println(morceau.getContent());
         }
 
         for (Artiste artiste : artistes) {
-            System.out.println(artiste.getHeaderTitle() + "\n");
+            System.out.println(artiste.getContent());
         }
         return null;
     }

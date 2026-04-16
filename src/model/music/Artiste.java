@@ -1,10 +1,11 @@
 package model.music;
 
 import model.interfaces.Consultable;
+import model.interfaces.Recherchable;
 
 import java.time.LocalDate;
 
-public class Artiste implements Consultable {
+public class Artiste implements Consultable, Recherchable {
     private int id;
     private String pseudo;
     private String description;
@@ -32,6 +33,18 @@ public class Artiste implements Consultable {
 
     @Override
     public SequenceDeMusique getElements(){ return new SequenceDeMusique();}
+
+
+    // ------------ Partie interface Recherchable -------------------
+    @Override
+    public String getSearchTitle() { return getHeaderTitle(); }
+
+    @Override
+    public String getSearchSubtitle() { return "Artiste"; }
+
+    @Override
+    public String getContent() { return getSearchTitle() + " - " + getSearchSubtitle(); }
+
 }
 
 

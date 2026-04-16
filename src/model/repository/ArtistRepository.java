@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistRepository {
-    Connection conn;
+    protected Connection conn;
 
     public ArtistRepository (Connection c) { this.conn = c; }
 
-    public Artiste createArtist(ResultSet rs) throws SQLException{
+    public Artiste createArtist(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String pseudo = rs.getString("pseudo");
         String description = rs.getString("description");
@@ -43,7 +43,16 @@ public class ArtistRepository {
         rs.close();
     }
 
-    public Artiste fetchByI (int id) { return null; }
+    public Artiste fetchById(int id) throws SQLException {
+        String query = "SELECT * FROM artiste WHERE id = ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, id);
+
+        ResultSet rs = p.executeQuery();
+        rs.next();
+
+        return createArtist(rs);
+    }
 
     public List<Artiste> searchByName (String name, int limit) throws SQLException{
         String query = "SELECT * FROM artiste WHERE pseudo ILIKE ? LIMIT ?";
@@ -61,5 +70,5 @@ public class ArtistRepository {
 //TODO conversion DATE, java ne comprends pas le format de la db (juste une conversion à faire
 
 /*
-TODO : implémenter une fonction recherche
+TODO : implémenter une fonction recherche -> fait mais manque l'ajout de la fonction des albums
  */

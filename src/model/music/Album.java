@@ -3,17 +3,18 @@ package model.music;
 import model.interfaces.Consultable;
 import model.interfaces.Recherchable;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Album implements Consultable, Recherchable {
     private int id;
-    private Date dateCreation;
+    private LocalDate dateCreation;
     private String description;
     private String name;
     private Artiste artiste;
     private Group group;
 
-    public Album(int id, Date dateCreation, String description, String name, Artiste artiste) {
+    public Album(int id, LocalDate dateCreation, String description, String name, Artiste artiste) {
         this.id = id;
         this.dateCreation = dateCreation;
         this.description = description;
@@ -21,7 +22,7 @@ public class Album implements Consultable, Recherchable {
         this.artiste = artiste;
     }
 
-    public Album(int id, Date dateCreation, String description, String name, Group group) {
+    public Album(int id, LocalDate dateCreation, String description, String name, Group group) {
         this.id = id;
         this.dateCreation = dateCreation;
         this.description = description;

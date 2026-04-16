@@ -25,11 +25,11 @@ public class ArtistRepository {
         return new Artiste(id, pseudo, description, birthDate);
     }
 
-    public void fetchAll() throws SQLException {
+    public List<Artiste> fetchAll() throws SQLException {
         String query = "SELECT * FROM artiste";
         PreparedStatement p = conn.prepareStatement(query);
         ResultSet rs = p.executeQuery();
-        ArrayList<Artiste> array = new ArrayList<Artiste>();
+        ArrayList<Artiste> list = new ArrayList<Artiste>();
         boolean encore = rs.next();
         while(encore) {
             java.sql.Date sqlDate = rs.getDate("birth_date");
@@ -37,10 +37,11 @@ public class ArtistRepository {
 
             System.out.println("Artiste trouvé (ID " + rs.getInt(1) + "): \n\t-Pseudo : " + rs.getString(2)
                     +"\n\t-Date de naissance : " + birthDate + "\n\t-Description : " + rs.getString(3));
-            array.add(createArtist(rs));
+            list.add(createArtist(rs));
             encore = rs.next();
         }
         rs.close();
+        return list;
     }
 
     public Artiste fetchById(int id) throws SQLException {
@@ -71,4 +72,4 @@ public class ArtistRepository {
 
 /*
 TODO : implémenter une fonction recherche -> fait mais manque l'ajout de la fonction des albums
- */
+*/

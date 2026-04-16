@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlbumRepository {
     protected Connection conn;
@@ -23,7 +25,7 @@ public class AlbumRepository {
         int artisteId = rs.getInt("artiste_id");
         if(!rs.wasNull()) {
             ArtistRepository art = new ArtistRepository(conn);
-            Artiste artiste = art.fetchById(id);
+            Artiste artiste = art.fetchById(artisteId);
             return new Album(id, date, desc, name, artiste);
         }
 
@@ -43,8 +45,27 @@ public class AlbumRepository {
         return createAlbum(rs);
     }
 
-    public Album fetchByName() throws SQLException {
+    public Album fetchByName(String name) throws SQLException {
+        String query = "SELECT * FROM album WHERE name = ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setString(1, name);
+
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        return createAlbum(rs);
         //TODO : a implémenter a voir si un seul résultat ou une liste (mais plutot résultat simple, la liste est gérer dans la classe search)
-        return null;
+    }
+
+    public List<Album> searchByName(String name, int limit) throws SQLException {
+        String query = "SELECT * FROM album WHERE name ILIKE ? LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setString(1, "%" + name + "%");
+        p.setInt(2, limit);
+
+        ResultSet rs = p.executeQuery();
+        List<Album> list = new ArrayList<>();
+
+        while(rs.next()) { list.add(createAlbum(rs)); }
+        return list;
     }
 }

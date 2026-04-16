@@ -1,6 +1,5 @@
 package model.repository;
 import model.music.Artiste;
-import model.music.Group;
 import model.music.Morceau;
 
 import java.sql.Connection;
@@ -17,50 +16,49 @@ public class MorceauRepository {
 
     public MorceauRepository(Connection c) { this.conn = c;}
 
-    public Morceau createMorceau(PreparedStatement q) throws SQLException {
-        ResultSet rs = q.executeQuery();
-        rs.next();
-        java.sql.Date sqlDate = rs.getDate("date_sortie");
-        LocalDate dateSortie = (sqlDate != null) ? sqlDate.toLocalDate() : null;
-
-        System.out.println("Morceau trouvé : \n\t-Titre : " + rs.getString(9)
-                +"\n\t-Date sortie : " + dateSortie + "\n\t-Genre : " + rs.getString(4));
-        Morceau m;
-        if (rs.getInt("id") != 0) { m = new Morceau(rs.getInt("id"), dateSortie, (Artiste) null, rs.getInt("temps"), rs.getString("titre"), rs.getString(3)); }
-        else { m = new Morceau(rs.getInt("id"), dateSortie, (Group) null, rs.getInt(3), rs.getString("titre"), rs.getString("titre")); }
-
-        rs.close();
-        return m;
-    }
-
     public Morceau createMorceau(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
         java.sql.Date sqlDate = rs.getDate("date_sortie");
         LocalDate dateSortie = (sqlDate != null) ? sqlDate.toLocalDate() : null;
-        Morceau m;
-        if (rs.getInt("id") != 0) { m = new Morceau(rs.getInt("id"), dateSortie, (Artiste) null, rs.getInt("temps"), rs.getString("titre"), rs.getString(3)); }
-        else { m = new Morceau(rs.getInt("id"), dateSortie, (Group) null, rs.getInt(3), rs.getString("titre"), rs.getString("titre")); }
-        return m;
+        int artisteId = rs.getInt("artiste_id");
+        if(!rs.wasNull()) {
+            ArtistRepository art = new ArtistRepository(conn);
+            Artiste artiste = art.fetchById(artisteId);
+            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"));
+        }
+
+        int groupID = rs.getInt("group_id");
+        //TODO : implémenter return avec un morceau créer avec un groupe
+
+        return null;
+
     }
 
     public Morceau fetchByArtist(Artiste a) throws SQLException{
         String query = "SELECT * FROM morceau WHERE artiste_id = ?";
         PreparedStatement q = conn.prepareStatement(query);
         q.setInt(1, a.getId());
-        return createMorceau(q);
+        ResultSet rs = q.executeQuery();
+        rs.next();
+        return createMorceau(rs);
     }
 
     public Morceau fetchById(int id) throws SQLException {
         String query = "SELECT * FROM morceau WHERE id = ?";
         PreparedStatement q = conn.prepareStatement(query);
         q.setInt(1, id);
-        return createMorceau(q);
+        ResultSet rs = q.executeQuery();
+        rs.next();
+        return createMorceau(rs);
     }
 
     public Morceau fetchByName (String name) throws SQLException {
         String query = "SELECT * FROM morceau WHERE titre = ?";
         PreparedStatement q = conn.prepareStatement(query);
         q.setString(1, name);
-        return createMorceau(q);
+        ResultSet rs = q.executeQuery();
+        rs.next();
+        return createMorceau(rs);
     }
 
     public List<Morceau> fetchByName(String name, int limit) throws SQLException{
@@ -74,7 +72,6 @@ public class MorceauRepository {
         return list;
     }
 }
-
 
 /*
 TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)

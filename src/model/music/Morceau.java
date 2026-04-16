@@ -16,13 +16,14 @@ public class Morceau implements Recherchable {
     private int numero_piste;
     private String titre;
 
-    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre) {
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.artiste = artiste;
         this.temps = temps;
         this.genre = genre;
         this.titre = titre;
+        this.numero_piste = numero_piste;
     }
 
     public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre) {
@@ -47,7 +48,7 @@ public class Morceau implements Recherchable {
 
     //----- Interface Recherchable --------
     @Override
-    public String getSearchTitle() { return this.getTitre() + "-" + this.getAutorName(); }
+    public String getSearchTitle() { return this.getTitre() + " - " + this.getAutorName(); }
 
     @Override
     public String getSearchSubtitle(){ return "Morceau"; }

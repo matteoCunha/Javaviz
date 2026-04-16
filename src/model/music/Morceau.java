@@ -26,17 +26,20 @@ public class Morceau implements Recherchable {
         this.numero_piste = numero_piste;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre) {
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.group = group;
         this.temps = temps;
         this.genre = genre;
         this.titre = titre;
+        this.numero_piste = numero_piste;
     }
 
     public void ajouterEcoute() { this.nb_ecoutes++; }
     public String getTitre() { return this.titre; }
+    public int getId() { return this.id; }
+    public int getNumeroPiste()  { return this.numero_piste;}
     public String getAutorName() {
         if (this.artiste != null) {
             return this.artiste.getPseudo();

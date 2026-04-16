@@ -1,5 +1,6 @@
 package model.repository;
 import model.music.Artiste;
+import model.music.Group;
 import model.music.Morceau;
 
 import java.sql.Connection;
@@ -27,11 +28,10 @@ public class MorceauRepository {
             return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"));
         }
 
-        int groupID = rs.getInt("group_id");
-        //TODO : implémenter return avec un morceau créer avec un groupe
-
-        return null;
-
+        int groupId = rs.getInt("group_id");
+        GroupRepository groupRepository = new GroupRepository(conn);
+        Group group = groupRepository.fetchById(groupId);
+        return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"));
     }
 
     public Morceau fetchByArtist(Artiste a) throws SQLException{
@@ -71,10 +71,20 @@ public class MorceauRepository {
         while(rs.next()) { list.add(createMorceau(rs)); }
         return list;
     }
+
+    public List<Morceau> fetchByAlbum(int album_id) throws SQLException {
+        String query = "SELECT * FROM morceau WHERE album_id = ? ORDER BY numero_piste";
+        PreparedStatement q = conn.prepareStatement(query);
+        q.setInt(1, album_id);
+
+        ResultSet rs = q.executeQuery();
+
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceau(rs)); }
+        return list;
+    }
 }
 
 /*
 TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)
 */
-
-//TODO test branch

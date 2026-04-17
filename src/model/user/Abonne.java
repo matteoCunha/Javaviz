@@ -14,4 +14,6 @@ public class Abonne extends CompteConnecte {
 
     @Override
     public boolean canCreatePlaylist() { return true; }
+
+
 }

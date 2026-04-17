@@ -40,6 +40,7 @@ public class SequenceDeMusique {
             this.head.prev = newNode;
             this.head = newNode;
         }
+        this.size++;
     }
 
     public void pushBack(Morceau m) {
@@ -52,12 +53,14 @@ public class SequenceDeMusique {
             newNode.prev = this.tail;
             this.tail = newNode;
         }
+        this.size++;
     }
 
     public void remove(Morceau m) {
         Node current = this.head;
         while (current != null && current.morceau != m) { current = current.next; }
         remove(current);
+        this.size--;
     }
 
     public void remove(Node n) {
@@ -85,6 +88,7 @@ public class SequenceDeMusique {
         }
 
         n.next = null; n.prev = null;
+        this.size--;
     }
 }
 //TODO : Ajouter fonction pour bouger un morceau de place (utiliser les numero_piste dans la classe Morceau)

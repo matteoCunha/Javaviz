@@ -15,7 +15,7 @@ public class GroupRepository {
 
     public GroupRepository(Connection c) { this.conn = c; }
 
-    public Group createGroup(ResultSet rs) throws SQLException {
+    public Group createGroupFromsql(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
         String description = rs.getString("description");
@@ -33,7 +33,7 @@ public class GroupRepository {
         ResultSet rs = p.executeQuery();
         rs.next();
 
-        return createGroup(rs);
+        return createGroupFromsql(rs);
     }
 
     public List<Group> searchByName(String name, int limit) throws SQLException {
@@ -45,7 +45,7 @@ public class GroupRepository {
         List<Group> list = new ArrayList<>();
         ResultSet rs = p.executeQuery();
 
-        while(rs.next()) { list.add(createGroup(rs)); }
+        while(rs.next()) { list.add(createGroupFromsql(rs)); }
         return list;
     }
 }

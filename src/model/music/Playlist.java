@@ -1,5 +1,6 @@
 package model.music;
 
+import model.repository.PlaylistRepository;
 import model.repository.SearchResult;
 import model.user.Abonne;
 
@@ -18,5 +19,5 @@ public class Playlist {
         this.sequence = h;
     }
 
-
+    public void printSequence() { sequence.printPlaylist(); }
 }

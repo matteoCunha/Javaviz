@@ -38,7 +38,7 @@ public class PlaylistRepository {
     }
 
     public List<Playlist> fetchAllPlaylistFromsql(Abonne abonne) throws SQLException {
-        String query = "SELECT * FROM Playlist WHERE user_id = ?";
+        String query = "SELECT * FROM playlist WHERE user_id = ?";
         PreparedStatement p = conn.prepareStatement(query);
         p.setInt(1, abonne.getId());
 

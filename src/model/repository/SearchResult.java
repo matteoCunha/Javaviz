@@ -30,6 +30,7 @@ public class SearchResult {
         List<Artiste> artistes = artistRepository.searchByName(query, 3);
         List<Album> albums = albumRepository.searchByName(query, 2);
         List<Group> groups = groupRepository.searchByName(query, 2);
+
         for (Morceau morceau : morceaux) {
             System.out.println(morceau.getContent());
         }

@@ -90,5 +90,14 @@ public class SequenceDeMusique {
         n.next = null; n.prev = null;
         this.size--;
     }
+
+    public void printPlaylist() {
+        Node current = head;
+        System.out.println("\nSequence de Musiques :");
+        while(current != null) {
+            System.out.println(current.morceau.getContent());
+            current = current.next;
+        }
+    }
 }
 //TODO : Ajouter fonction pour bouger un morceau de place (utiliser les numero_piste dans la classe Morceau)

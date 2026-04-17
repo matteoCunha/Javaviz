@@ -27,14 +27,23 @@ public class UserRepository {
         return new Abonne(pseudo, password, id);
     }
 
-    public CompteConnecte fetchByPseudo(String pseudo) throws SQLException{
-        String query = "SELECT * FROM User WHERE pseudoo = ?";
+    public CompteConnecte fetchByPseudo(String pseudo) throws SQLException {
+        System.out.println("--- 1. DEBUT DU FETCH ---");
+        System.out.println("Recherche du pseudo : [" + pseudo + "]");
+
+        // ATTENTION : Mets bien le nom de ta table ici ("User" avec les guillemets ou users)
+        String query = "SELECT * FROM users  WHERE pseudo = ?";
         PreparedStatement p = conn.prepareStatement(query);
         p.setString(1, pseudo);
 
         ResultSet rs = p.executeQuery();
-        rs.next();
 
-        return createAbonneFromsql(rs);
+        if (rs.next()) {
+            System.out.println("--- 2. PSEUDO TROUVÉ EN BASE ! ---");
+            return createAbonneFromsql(rs);
+        } else {
+            System.out.println("--- 2. ERREUR : PSEUDO INTROUVABLE EN BASE ---");
+            return null;
+        }
     }
 }

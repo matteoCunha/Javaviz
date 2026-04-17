@@ -1,7 +1,7 @@
 package model.user;
 
 public abstract class CompteConnecte extends User{
-    private int id;
+    protected int id;
     private String password;
 
     public CompteConnecte(String pseudo, int id, String password) {
@@ -10,7 +10,8 @@ public abstract class CompteConnecte extends User{
         this.password = password;
     }
 
-    public boolean comparePass(String other) { return other == this.password; }
+    public boolean comparePass(String other) { return this.password.equals(other); }
 
     public int getId() { return this.id; }
+    public String getPassword() { return this.password; }
 }

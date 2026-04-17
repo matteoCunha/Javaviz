@@ -17,7 +17,7 @@ public class AlbumRepository {
 
     public AlbumRepository(Connection c) { this.conn = c; }
 
-    public Album createAlbum(ResultSet rs) throws SQLException {
+    public Album createAlbumFromsql(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String desc = rs.getString("description");
         String name = rs.getString("name");
@@ -44,7 +44,7 @@ public class AlbumRepository {
         ResultSet rs = p.executeQuery();
         rs.next();
 
-        return createAlbum(rs);
+        return createAlbumFromsql(rs);
     }
 
     public Album fetchByName(String name) throws SQLException {
@@ -54,7 +54,7 @@ public class AlbumRepository {
 
         ResultSet rs = p.executeQuery();
         rs.next();
-        return createAlbum(rs);
+        return createAlbumFromsql(rs);
         //TODO : a implémenter a voir si un seul résultat ou une liste (mais plutot résultat simple, la liste est gérer dans la classe search)
     }
 
@@ -67,7 +67,7 @@ public class AlbumRepository {
         ResultSet rs = p.executeQuery();
         List<Album> list = new ArrayList<>();
 
-        while(rs.next()) { list.add(createAlbum(rs)); }
+        while(rs.next()) { list.add(createAlbumFromsql(rs)); }
         return list;
     }
 }

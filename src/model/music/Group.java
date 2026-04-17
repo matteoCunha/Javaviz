@@ -1,10 +1,11 @@
 package model.music;
 
 import model.interfaces.Consultable;
+import model.interfaces.Recherchable;
 
 import java.time.LocalDate;
 
-public class Group implements Consultable {
+public class Group implements Consultable, Recherchable {
     private int id;
     private LocalDate dateCreation;
     private String description;
@@ -31,6 +32,17 @@ public class Group implements Consultable {
 
     @Override
     public SequenceDeMusique getElements(){ return new SequenceDeMusique();}
+
+
+    //----- Interface Recherchable --------
+    @Override
+    public String getSearchTitle() { return this.getHeaderTitle() + " - " + this.getDescription(); }
+
+    @Override
+    public String getSearchSubtitle(){ return "Groupe"; }
+
+    @Override
+    public String getContent() {return getSearchTitle() + " - " + getSearchSubtitle(); }
 }
 /*
 champ de group :

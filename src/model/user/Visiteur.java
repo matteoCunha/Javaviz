@@ -1,10 +1,11 @@
 package model.user;
 
 public class Visiteur extends User{
-    private int compteurEcoute = 0;
+    private int compteurEcoute;
 
     public Visiteur() {
         super("Invité");
+        this.compteurEcoute = 0;
     }
 
     public void incrementerEcoute() { this.compteurEcoute++; }

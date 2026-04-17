@@ -15,7 +15,7 @@ public class ArtistRepository {
 
     public ArtistRepository (Connection c) { this.conn = c; }
 
-    public Artiste createArtist(ResultSet rs) throws SQLException {
+    public Artiste createArtistFromsql(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String pseudo = rs.getString("pseudo");
         String description = rs.getString("description");
@@ -37,7 +37,7 @@ public class ArtistRepository {
 
             System.out.println("Artiste trouvé (ID " + rs.getInt(1) + "): \n\t-Pseudo : " + rs.getString(2)
                     +"\n\t-Date de naissance : " + birthDate + "\n\t-Description : " + rs.getString(3));
-            list.add(createArtist(rs));
+            list.add(createArtistFromsql(rs));
             encore = rs.next();
         }
         rs.close();
@@ -52,7 +52,7 @@ public class ArtistRepository {
         ResultSet rs = p.executeQuery();
         rs.next();
 
-        return createArtist(rs);
+        return createArtistFromsql(rs);
     }
 
     public List<Artiste> searchByName (String name, int limit) throws SQLException{
@@ -63,7 +63,7 @@ public class ArtistRepository {
         ResultSet rs = q.executeQuery();
         List<Artiste> list = new ArrayList<>();
 
-        while (rs.next()) { list.add(createArtist(rs)); }
+        while (rs.next()) { list.add(createArtistFromsql(rs)); }
         return list;
     }
 }

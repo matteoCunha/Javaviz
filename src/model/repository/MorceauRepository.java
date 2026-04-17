@@ -17,7 +17,7 @@ public class MorceauRepository {
 
     public MorceauRepository(Connection c) { this.conn = c;}
 
-    public Morceau createMorceau(ResultSet rs) throws SQLException {
+    public Morceau createMorceauFromsql(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         java.sql.Date sqlDate = rs.getDate("date_sortie");
         LocalDate dateSortie = (sqlDate != null) ? sqlDate.toLocalDate() : null;
@@ -40,7 +40,7 @@ public class MorceauRepository {
         q.setInt(1, a.getId());
         ResultSet rs = q.executeQuery();
         rs.next();
-        return createMorceau(rs);
+        return createMorceauFromsql(rs);
     }
 
     public Morceau fetchById(int id) throws SQLException {
@@ -49,7 +49,7 @@ public class MorceauRepository {
         q.setInt(1, id);
         ResultSet rs = q.executeQuery();
         rs.next();
-        return createMorceau(rs);
+        return createMorceauFromsql(rs);
     }
 
     public Morceau fetchByName (String name) throws SQLException {
@@ -58,7 +58,7 @@ public class MorceauRepository {
         q.setString(1, name);
         ResultSet rs = q.executeQuery();
         rs.next();
-        return createMorceau(rs);
+        return createMorceauFromsql(rs);
     }
 
     public List<Morceau> fetchByName(String name, int limit) throws SQLException{
@@ -68,7 +68,7 @@ public class MorceauRepository {
         ResultSet rs = q.executeQuery();
 
         List<Morceau> list = new ArrayList<>();
-        while(rs.next()) { list.add(createMorceau(rs)); }
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
         return list;
     }
 
@@ -80,7 +80,7 @@ public class MorceauRepository {
         ResultSet rs = q.executeQuery();
 
         List<Morceau> list = new ArrayList<>();
-        while(rs.next()) { list.add(createMorceau(rs)); }
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
         return list;
     }
 }

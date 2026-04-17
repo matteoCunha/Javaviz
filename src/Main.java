@@ -14,6 +14,7 @@ public class Main {
             MorceauRepository m = new MorceauRepository(conn);
             ArtistRepository a = new ArtistRepository(conn);
             AlbumRepository alb = new AlbumRepository(conn);
+            GroupRepository g = new GroupRepository(conn);
             Morceau gims = m.fetchByName("PARISIENNE");
             System.out.println("Test morceau " + gims.getAutorName()); //doit renvoyer inconnu car dans l'implémentaiton quand artiste ou group n'est pas trouvé dans la classe cela renvoie inconnu par défaut
 
@@ -28,8 +29,8 @@ public class Main {
                 encore = rs.next();
             }
 
-            SearchResult s = new SearchResult(m, a, alb);
-            s.globalSearch("Bo");
+            SearchResult s = new SearchResult(m, a, alb, g);
+            s.globalSearch("b");
 
             Album test = alb.fetchById(1);
             test.printAlbum();

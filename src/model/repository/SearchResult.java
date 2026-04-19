@@ -1,9 +1,6 @@
 package model.repository;
 
-import model.music.Album;
-import model.music.Artiste;
-import model.music.Group;
-import model.music.Morceau;
+import model.music.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,7 +9,8 @@ import java.util.List;
 public class SearchResult {
     private List<Morceau> morceaux;
     private List<Artiste> artistes;
-    private List<Album> albums; //pas encore pret pour implémentation
+    private List<Album> albums;
+    private List<Playlist> publicPlaylist;
     private MorceauRepository morceauRepository;
     private ArtistRepository artistRepository;
     private AlbumRepository albumRepository;
@@ -21,7 +19,6 @@ public class SearchResult {
     public SearchResult(MorceauRepository m, ArtistRepository a, AlbumRepository alb, GroupRepository g) {
         this.morceauRepository = m; this.artistRepository = a;
         this.albumRepository = alb; this.groupRepository = g;
-        //TODO : reste a ajouter la logique pour albums (et playlist peut-être plus tard)
     }
 
     public SearchResult globalSearch(String query) throws SQLException {

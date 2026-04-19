@@ -1,6 +1,7 @@
 package model.user;
 
 import model.music.Playlist;
+import model.music.SequenceDeMusique;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class Abonne extends CompteConnecte {
             this.playlist.get(i).printSequence();
         }
     }
+
+    public SequenceDeMusique getFirstSequence() { return playlist.get(0).getSequence();}
 
     public String sePresenter() { return "Abonne -> name : " + this.getPseudo() + " - password : " + this.getPassword(); }
 }

@@ -50,7 +50,7 @@ public class PlaylistRepository {
             String name = rs.getString("nom");
             boolean isPublic = rs.getBoolean("isPublic");
             SequenceDeMusique seq = creationSequenceFromId(id);
-            list.add(new Playlist(id, name,isPublic, abonne, seq));
+            list.add(new Playlist(id, name, isPublic, abonne, seq));
         }
 
         return list;

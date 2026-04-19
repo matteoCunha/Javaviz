@@ -40,6 +40,7 @@ public class Morceau implements Recherchable {
     public String getTitre() { return this.titre; }
     public int getId() { return this.id; }
     public int getNumeroPiste()  { return this.numero_piste;}
+    public void setNumeroPiste(int n)  { this.numero_piste = n; }
     public String getAutorName() {
         if (this.artiste != null) {
             return this.artiste.getPseudo();

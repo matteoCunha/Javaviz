@@ -1,5 +1,7 @@
 package model.music;
 
+import java.lang.reflect.WildcardType;
+
 //implémentation doublyLinkedList qui va servir pour les albums et les playlists
 public class SequenceDeMusique {
     Node head;
@@ -24,6 +26,8 @@ public class SequenceDeMusique {
         this.size = 0;
     }
 
+    public Node getHead() { return head.next; }
+
     public SequenceDeMusique(Morceau m) {
         this.head = new Node(m);
         this.tail = this.head;
@@ -41,6 +45,28 @@ public class SequenceDeMusique {
             this.head = newNode;
         }
         this.size++;
+    }
+
+    public void moveUp(Node n) {// bouger le morceau plus haut dans la playlist (vers le head)
+        if (n == null || n == this.head) { return ; }
+
+        Morceau temp = n.morceau;
+        int iTemp = n.morceau.getNumeroPiste();
+        n.morceau = n.prev.morceau;
+        n.morceau.setNumeroPiste(n.prev.morceau.getNumeroPiste());
+        n.prev.morceau = temp;
+        n.prev.morceau.setNumeroPiste(iTemp);
+    }
+
+    public void moveDown(Node n) {
+        if (n == null || n == this.tail) { return; }
+
+        Morceau temp = n.morceau;
+        int iTemp = n.morceau.getNumeroPiste();
+        n.morceau = n.next.morceau;
+        n.morceau.setNumeroPiste(n.next.morceau.getNumeroPiste());
+        n.next.morceau = temp;
+        n.next.morceau.setNumeroPiste(iTemp);
     }
 
     public void pushBack(Morceau m) {
@@ -94,7 +120,9 @@ public class SequenceDeMusique {
     public void printPlaylist() {
         Node current = head;
         System.out.println("\nSequence de Musiques :");
+        int i = 1;
         while(current != null) {
+            System.out.print(i + " - "); i++;
             System.out.println(current.morceau.getContent());
             current = current.next;
         }

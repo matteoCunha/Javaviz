@@ -51,9 +51,9 @@ public class SequenceDeMusique {
         if (n == null || n == this.head) { return ; }
 
         Morceau temp = n.morceau;
-        int iTemp = n.morceau.getNumeroPiste();
+        int iTemp = n.morceau.getPosition();
         n.morceau = n.prev.morceau;
-        n.morceau.setNumeroPiste(n.prev.morceau.getNumeroPiste());
+        n.morceau.setPosition(n.prev.morceau.getPosition());
         n.prev.morceau = temp;
         n.prev.morceau.setNumeroPiste(iTemp);
     }
@@ -62,11 +62,11 @@ public class SequenceDeMusique {
         if (n == null || n == this.tail) { return; }
 
         Morceau temp = n.morceau;
-        int iTemp = n.morceau.getNumeroPiste();
+        int iTemp = n.morceau.getPosition();
         n.morceau = n.next.morceau;
-        n.morceau.setNumeroPiste(n.next.morceau.getNumeroPiste());
+        n.morceau.setPosition(n.next.morceau.getPosition());
         n.next.morceau = temp;
-        n.next.morceau.setNumeroPiste(iTemp);
+        n.next.morceau.setPosition(iTemp);
     }
 
     public void pushBack(Morceau m) {
@@ -122,10 +122,10 @@ public class SequenceDeMusique {
         System.out.println("\nSequence de Musiques :");
         int i = 1;
         while(current != null) {
-            System.out.print(i + " - "); i++;
+            System.out.print(i + " - " + current.morceau.getPosition() + " - "); i++;
             System.out.println(current.morceau.getContent());
             current = current.next;
         }
     }
 }
-//TODO : Ajouter fonction pour bouger un morceau de place (utiliser les numero_piste dans la classe Morceau)
+//TODO : fonction lecture (viendras avec l'interface graphique)

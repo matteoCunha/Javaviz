@@ -30,7 +30,7 @@ public class PlaylistRepository {
         SequenceDeMusique seq = new SequenceDeMusique();
 
         while(rs.next()) {
-            Morceau m = morceauRepository.createMorceauFromsql(rs);
+            Morceau m = morceauRepository.createFromSQLPlaylist(rs);
             seq.pushBack(m);
         }
 

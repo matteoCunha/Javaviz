@@ -15,6 +15,7 @@ public class Morceau implements Recherchable {
     private int nb_ecoutes;
     private int numero_piste;
     private String titre;
+    private int position; // peut être null -> sert uniquement pour les playlists
 
     public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste) {
         this.id = id;
@@ -24,6 +25,17 @@ public class Morceau implements Recherchable {
         this.genre = genre;
         this.titre = titre;
         this.numero_piste = numero_piste;
+    }
+
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int position) {
+        this.id = id;
+        this.dateSortie = dateSortie;
+        this.artiste = artiste;
+        this.temps = temps;
+        this.genre = genre;
+        this.titre = titre;
+        this.numero_piste = numero_piste;
+        this.position = position;
     }
 
     public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste) {
@@ -36,11 +48,29 @@ public class Morceau implements Recherchable {
         this.numero_piste = numero_piste;
     }
 
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int position) {
+        this.id = id;
+        this.dateSortie = dateSortie;
+        this.group = group;
+        this.temps = temps;
+        this.genre = genre;
+        this.titre = titre;
+        this.numero_piste = numero_piste;
+        this.position = position;
+    }
+
     public void ajouterEcoute() { this.nb_ecoutes++; }
     public String getTitre() { return this.titre; }
     public int getId() { return this.id; }
     public int getNumeroPiste()  { return this.numero_piste;}
     public void setNumeroPiste(int n)  { this.numero_piste = n; }
+
+    public int getPosition() { return this.position; }
+    public void setPosition(int n) { this.position = n;}
+
+    public int getNb_ecoutes() { return nb_ecoutes; }
+    public void setNb_ecoutes(int n) { this.nb_ecoutes = n; }
+
     public String getAutorName() {
         if (this.artiste != null) {
             return this.artiste.getPseudo();
@@ -63,7 +93,7 @@ public class Morceau implements Recherchable {
 
 
 /*
-Dans la base de donnée (index des colonnes commence à 1 pas a 0) :
+Dans la base de donnée :
 1 - id
 2 - date_sortie
 3 - temps

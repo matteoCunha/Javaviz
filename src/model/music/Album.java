@@ -4,6 +4,7 @@ import model.interfaces.Consultable;
 import model.interfaces.Recherchable;
 import model.repository.MorceauRepository;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -43,10 +44,11 @@ public class Album implements Consultable, Recherchable {
         }
     }
 
+    public int getId() { return this.id; }
     public String getName() { return this.name; }
     public String getArtistName() { if(this.artiste != null) { return this.artiste.getPseudo(); } return ""; }
     public String getGroupName() { if(this.group != null) { return this.group.getName(); } return ""; }
-
+    public java.sql.Date getSqlDate() { return Date.valueOf(this.dateCreation); }
 
 
     // ------------ Partie interface Consultable -------------------
@@ -57,7 +59,6 @@ public class Album implements Consultable, Recherchable {
     public String getSubtitle(){
         if (this.artiste != null) { return "Artiste : " + this.artiste.getPseudo(); }
         else if (this.group != null) { return "Group : " + this.group.getName(); }
-
         return "Inconnu";
     }
 

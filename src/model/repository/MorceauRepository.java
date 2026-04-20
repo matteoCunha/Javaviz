@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class MorceauRepository {
     protected Connection conn;
@@ -32,6 +33,32 @@ public class MorceauRepository {
         GroupRepository groupRepository = new GroupRepository(conn);
         Group group = groupRepository.fetchById(groupId);
         return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"));
+    }
+
+    public Morceau createFromSQLPlaylist(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        java.sql.Date sqlDate = rs.getDate("date_sortie");
+        LocalDate dateSortie = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+        int artisteId = rs.getInt("artiste_id");
+        if(!rs.wasNull()) {
+            ArtistRepository art = new ArtistRepository(conn);
+            Artiste artiste = art.fetchById(artisteId);
+            int position = rs.getInt("position");
+            if (!rs.wasNull()) {
+                return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), position);
+            }
+            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), 0);
+        }
+
+        int groupId = rs.getInt("group_id");
+        GroupRepository groupRepository = new GroupRepository(conn);
+        Group group = groupRepository.fetchById(groupId);
+        int position = rs.getInt("position");
+        if (!rs.wasNull()) {
+            return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), position);
+        }
+        return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), 0);
+
     }
 
     public Morceau fetchByArtist(Artiste a) throws SQLException{
@@ -83,8 +110,22 @@ public class MorceauRepository {
         while(rs.next()) { list.add(createMorceauFromsql(rs)); }
         return list;
     }
+
+    public void updateMorceau(Morceau m) throws SQLException {
+        String query = "UPDATE morceau SET nb_ecoutes = ?, numero_piste = ? WHERE id = ? ";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, m.getNb_ecoutes());
+        p.setInt(2, m.getNumeroPiste());
+        p.setInt(3, m.getId());
+
+        int rs = p.executeUpdate();
+    }
 }
 
 /*
 TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)
 */
+
+//fonction updateMorceau fonctionne
+//TODO: a implémenter -> logique d'update de la base de donnée a la fermeture de l'appli pour enregistrer les possibles modifs
+//TODO: faire les fonctions update pour tous les autres éléments de la DB

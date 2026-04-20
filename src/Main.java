@@ -7,6 +7,7 @@ import model.user.Abonne;
 import model.user.GestionConnexion;
 
 import javax.sound.midi.Sequence;
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,20 +25,14 @@ public class Main {
             UserRepository u = new UserRepository(conn);
             PlaylistRepository play = new PlaylistRepository(conn, m);
 
-            GestionConnexion gestionConn = new GestionConnexion(conn, u);
-            Abonne matt = (Abonne) gestionConn.connexion("matteo", "root");
-
-
-            Album test = alb.fetchById(1);
-            test.printAlbum();
-            List<Playlist> l = play.fetchAllPlaylistFromsql(matt);
-            matt.setPlaylist(l);
+            GestionConnexion gestionConnexion = new GestionConnexion(conn, u);
+            Abonne matt = (Abonne) gestionConnexion.connexion("matteo", "root");
+            matt.setPlaylist(play.fetchAllPlaylistFromsql(matt));
+            matt.printPlay();
             SequenceDeMusique seq = matt.getFirstSequence();
-            seq.printPlaylist();
-            seq.moveUp(seq.getHead());
+            seq.moveDown(seq.getHead());
             seq.printPlaylist();
 
-            System.out.println(matt.sePresenter());
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");
             e.printStackTrace();

@@ -14,7 +14,6 @@ import java.util.List;
 
 public class AlbumRepository {
     protected Connection conn;
-
     public AlbumRepository(Connection c) { this.conn = c; }
 
     public Album createAlbumFromsql(ResultSet rs) throws SQLException {
@@ -69,5 +68,16 @@ public class AlbumRepository {
 
         while(rs.next()) { list.add(createAlbumFromsql(rs)); }
         return list;
+    }
+
+    public void updateAlbum(Album a) throws SQLException {
+        String query = "UPDATE album SET date_creation = ?, description = ?, name = ? WHERE id = ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setDate(1, a.getSqlDate());
+        p.setString(2, a.getDescription());
+        p.setString(3, a.getName());
+        p.setInt( 4, a.getId());
+
+        int rs = p.executeUpdate();
     }
 }

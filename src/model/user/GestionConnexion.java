@@ -26,3 +26,5 @@ public class GestionConnexion {
         return new Visiteur();
     }
 }
+//TODO : fonction update
+//TODO: implémenter la connection avec compte administrateur pour modif des playlist/albums/abonnées etc

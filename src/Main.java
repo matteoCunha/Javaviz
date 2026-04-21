@@ -32,6 +32,7 @@ public class Main {
             SequenceDeMusique seq = matt.getFirstSequence();
             seq.moveDown(seq.getHead());
             seq.printPlaylist();
+            matt.updatePlaylists(play);
 
         } catch (SQLException e) {
             System.err.println("Erreur SQL lors de la connexion :");

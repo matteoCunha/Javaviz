@@ -2,7 +2,9 @@ package model.user;
 
 import model.music.Playlist;
 import model.music.SequenceDeMusique;
+import model.repository.PlaylistRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Abonne extends CompteConnecte {
@@ -29,6 +31,12 @@ public class Abonne extends CompteConnecte {
     }
 
     public SequenceDeMusique getFirstSequence() { return playlist.get(0).getSequence();}
+    public void updatePlaylists(PlaylistRepository p) throws SQLException {
+        for(int i = 0; i < this.playlist.size(); i++)
+        {
+            p.updatePlaylist(this.playlist.get(i));
+        }
+    }
 
     public String sePresenter() { return "Abonne -> name : " + this.getPseudo() + " - password : " + this.getPassword(); }
 }

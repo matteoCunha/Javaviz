@@ -48,4 +48,17 @@ public class GroupRepository {
         while(rs.next()) { list.add(createGroupFromsql(rs)); }
         return list;
     }
+
+    public void updateGroup(Group g) throws SQLException {
+        String query = "UPDATE groupe SET date_creation = ?, name = ?, description = ? WHERE id = ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setDate(1, g.getSqlDate());
+        p.setString(2, g.getName());
+        p.setString(3, g.getDescription());
+        p.setInt(4, g.getId());
+
+        int rs = p.executeUpdate();
+    }
 }
+
+//TODO : fonction update

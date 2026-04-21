@@ -4,6 +4,7 @@ import model.music.Album;
 import model.music.Artiste;
 import model.music.Group;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,6 +63,18 @@ public class AlbumRepository {
         PreparedStatement p = conn.prepareStatement(query);
         p.setString(1, "%" + name + "%");
         p.setInt(2, limit);
+
+        ResultSet rs = p.executeQuery();
+        List<Album> list = new ArrayList<>();
+
+        while(rs.next()) { list.add(createAlbumFromsql(rs)); }
+        return list;
+    }
+
+    public List<Album> fetchHomeAlbum() throws SQLException {
+        String query = "SELECT * FROM album ORDER BY date_creation DESC LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, 5);
 
         ResultSet rs = p.executeQuery();
         List<Album> list = new ArrayList<>();

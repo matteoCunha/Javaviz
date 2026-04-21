@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" xmlns:fx="http://javafx.com/fxml">
+<ScrollPane fx:controller="controller.HomeViewController" fitToWidth="true" style="-fx-background-color: transparent;" xmlns:fx="http://javafx.com/fxml">
     <VBox spacing="30" style="-fx-background-color: #121212;">
         <padding><Insets top="20" left="20" right="20" bottom="20"/></padding>
 

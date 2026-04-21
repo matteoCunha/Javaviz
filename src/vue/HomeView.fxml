@@ -3,20 +3,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane fx:controller="controller.HomeViewController" fitToWidth="true" style="-fx-background-color: transparent;" xmlns:fx="http://javafx.com/fxml">
-    <VBox spacing="30" style="-fx-background-color: #121212;">
-        <padding><Insets top="20" left="20" right="20" bottom="20"/></padding>
+<ScrollPane fx:controller="controller.HomeViewController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            style="-fx-background-color: #121212;"
+            xmlns:fx="http://javafx.com/fxml">
 
-        <VBox spacing="10">
-            <Label text="Morceaux" styleClass="label-header"/>
-            <HBox spacing="15" fx:id="tracksContainer">
-            </HBox>
-        </VBox>
+    <VBox spacing="30" style="-fx-background-color: #121212;">
+        <padding><Insets top="20" left="20" right="20" bottom="50"/></padding> <VBox spacing="10">
+        <Label text="Morceaux" styleClass="label-header"/>
+        <HBox spacing="15" fx:id="tracksContainer" />
+    </VBox>
 
         <VBox spacing="10">
             <Label text="Albums" styleClass="label-header"/>
-            <HBox spacing="15" fx:id="albumsContainer">
-            </HBox>
+            <HBox spacing="15" fx:id="albumsContainer" />
         </VBox>
+
+        <VBox spacing="10">
+            <Label text="Artistes" styleClass="label-header"/>
+            <HBox spacing="15" fx:id="artistsContainer" /> </VBox>
+
     </VBox>
 </ScrollPane>

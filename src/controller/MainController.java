@@ -9,6 +9,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.repository.DatabaseConnection;
+import model.user.User;
+import model.user.Visiteur;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,12 +18,33 @@ import java.sql.SQLException;
 
 public class MainController {
     Connection conn;
-    @FXML private StackPane contentArea; // C'est ici que le contenu change
-    @FXML private VBox sideMenu;         // Ton menu de gauche
-    @FXML private Label userLabel;       // Pour afficher "Visiteur" ou le Pseudo
+    User utilisateur; // utilisation si besoin utilisation du polymorphisme pour le passer en Abonne, Visiteur ou admin
+    @FXML private StackPane contentArea;
+    @FXML private VBox sideMenu;
+    @FXML private Label userLabel;
+    @FXML private HBox authContainer;
+    @FXML private HBox userProfileContainer;
 
     public MainController() throws SQLException {
         this.conn = DatabaseConnection.getConnection();
+        utilisateur = new Visiteur();
+    }
+
+    public void updateSessionState(Object user) {
+        if (user == null) {
+            authContainer.setVisible(true);
+            userProfileContainer.setVisible(false);
+
+            updateSideMenu(null);
+        } else {
+            // Mode Connecté
+            authContainer.setVisible(false);
+            userProfileContainer.setVisible(true);
+
+            userLabel.setText("Abonné Connecté");
+
+            updateSideMenu(user);
+        }
     }
 
     @FXML
@@ -35,13 +58,26 @@ public class MainController {
         loadView("HomeView.fxml");
     }
 
+    @FXML
+    public void showLogin() {
+        loadView("LoginView.fxml");
+    }
+
+    @FXML
+    public void showSignUp() {
+        System.out.println("Ouvrir la page d'inscription...");
+    }
+
+    @FXML
+    public void logout() {
+        updateSessionState(null);
+        showHome();
+    }
+
     public void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/" + fxmlFile));
             Node view = loader.load();
-
-
-
             contentArea.getChildren().setAll(view);
 
             if (fxmlFile.equals("HomeView.fxml")) {
@@ -58,8 +94,8 @@ public class MainController {
     public void updateSideMenu(Object user) {
         sideMenu.getChildren().clear();
 
-        if (user == null) {
-            Label info = new Label("Connectez-vous pour\nvoir vos playlists");
+        if (utilisateur instanceof Visiteur) {
+            Label info = new Label("S'abonner/Se connecter pour\nvoir vos playlists");
             info.setStyle("-fx-text-fill: #b3b3b3; -fx-padding: 10;");
             sideMenu.getChildren().add(info);
         } else {

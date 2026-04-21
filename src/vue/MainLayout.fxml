@@ -9,8 +9,20 @@
          <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
          <Button text="Accueil" styleClass="button-primary" onAction="#showHome"/>
          <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="300"/>
+
          <Region HBox.hgrow="ALWAYS" />
-         <Label fx:id="userLabel" text="Visiteur" style="-fx-text-fill: white;"/>
+
+         <StackPane>
+            <HBox fx:id="authContainer" spacing="15" alignment="CENTER">
+               <Button text="S'inscrire" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-font-weight: bold; -fx-cursor: hand;" onAction="#showSignUp"/>
+               <Button text="Se connecter" styleClass="button-primary" style="-fx-background-color: white; -fx-text-fill: black;" onAction="#showLogin"/>
+            </HBox>
+
+            <HBox fx:id="userProfileContainer" spacing="15" alignment="CENTER" visible="false">
+               <Label fx:id="userLabel" text="Pseudo" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+               <Button text="Déconnexion" style="-fx-background-color: transparent; -fx-text-fill: #d32f2f; -fx-cursor: hand; -fx-border-color: #d32f2f; -fx-border-radius: 20;" onAction="#logout"/>
+            </HBox>
+         </StackPane>
       </HBox>
    </top>
 

@@ -82,7 +82,7 @@ public class Morceau implements Recherchable {
 
     //----- Interface Recherchable --------
     @Override
-    public String getSearchTitle() { return this.getTitre() + " - " + this.getAutorName(); }
+    public String getSearchTitle() { return this.getTitre() + " - " + this.getAutorName() + " - " + this.getId(); }
 
     @Override
     public String getSearchSubtitle(){ return "Morceau"; }

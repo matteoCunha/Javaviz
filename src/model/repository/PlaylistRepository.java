@@ -55,4 +55,40 @@ public class PlaylistRepository {
 
         return list;
     }
+
+    public void updatePlaylist(Playlist playlist) throws SQLException {
+        SequenceDeMusique seq = playlist.getSequence();
+        SequenceDeMusique.Node current = seq.getHead();
+        conn.setAutoCommit(false);
+
+        try {
+            String delQuery = "DELETE FROM playlist_morceaux WHERE playlist_id = ?";
+            PreparedStatement pDel = conn.prepareStatement(delQuery);
+            pDel.setInt(1, playlist.getId());
+            pDel.executeUpdate();
+
+            String insertQuery = "INSERT INTO playlist_morceaux (playlist_id, morceaux_id, position) VALUES (?, ?, ?)";
+            PreparedStatement pInsert = conn.prepareStatement(insertQuery);
+
+            int positionAct = 1;
+            while(current != null) {
+                pInsert.setInt(1, playlist.getId());
+                pInsert.setInt(2, seq.getMorceau(current).getId());
+                pInsert.setInt(3, positionAct);
+
+                pInsert.addBatch();
+
+                current = seq.passToNext(current);
+                positionAct++;
+            }
+            pInsert.executeBatch();
+            conn.commit();
+
+        } catch (SQLException e){
+            conn.rollback(); throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
 }
+//TODO : fonction update le jeu est nul

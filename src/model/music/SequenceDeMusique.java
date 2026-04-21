@@ -1,6 +1,7 @@
 package model.music;
 
 import java.lang.reflect.WildcardType;
+import java.sql.SQLException;
 
 //implémentation doublyLinkedList qui va servir pour les albums et les playlists
 public class SequenceDeMusique {
@@ -26,7 +27,7 @@ public class SequenceDeMusique {
         this.size = 0;
     }
 
-    public Node getHead() { return head.next; }
+    public Node getHead() { return head; }
 
     public SequenceDeMusique(Morceau m) {
         this.head = new Node(m);
@@ -127,5 +128,8 @@ public class SequenceDeMusique {
             current = current.next;
         }
     }
+
+    public Node passToNext(Node current) { return current.next; }
+    public Morceau getMorceau(Node current) { return current.morceau; }
 }
 //TODO : fonction lecture (viendras avec l'interface graphique)

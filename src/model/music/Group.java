@@ -3,6 +3,7 @@ package model.music;
 import model.interfaces.Consultable;
 import model.interfaces.Recherchable;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Group implements Consultable, Recherchable {
@@ -19,6 +20,8 @@ public class Group implements Consultable, Recherchable {
     }
 
     public String getName() { return name; }
+    public Date getSqlDate() { return Date.valueOf(this.dateCreation); }
+    public int getId() { return this.id; }
 
     // ------------ Partie interface Consultable -------------------
     @Override

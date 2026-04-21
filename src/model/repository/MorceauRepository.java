@@ -111,6 +111,18 @@ public class MorceauRepository {
         return list;
     }
 
+    public List<Morceau> fetchHomeMorceaux() throws SQLException {
+        String query = "SELECT * FROM morceau ORDER BY nb_ecoutes DESC LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, 5);
+
+        ResultSet rs = p.executeQuery();
+
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
+        return list;
+    }
+
     public void updateMorceau(Morceau m) throws SQLException {
         String query = "UPDATE morceau SET nb_ecoutes = ?, numero_piste = ? WHERE id = ? ";
         PreparedStatement p = conn.prepareStatement(query);

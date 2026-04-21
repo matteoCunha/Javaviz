@@ -1,5 +1,6 @@
 package model.repository;
 
+import com.sun.scenario.effect.impl.prism.ps.PPSBlend_REDPeer;
 import model.music.Artiste;
 
 import java.sql.Connection;
@@ -64,6 +65,18 @@ public class ArtistRepository {
         List<Artiste> list = new ArrayList<>();
 
         while (rs.next()) { list.add(createArtistFromsql(rs)); }
+        return list;
+    }
+
+    public List<Artiste> fetchHomeArtists() throws SQLException {
+        String query = "SELECT * FROM artiste ORDER BY id LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, 5);
+
+        ResultSet rs = p.executeQuery();
+        List<Artiste> list = new ArrayList<>();
+
+        while(rs.next()) { list.add(createArtistFromsql(rs)); }
         return list;
     }
 }

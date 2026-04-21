@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" xmlns:fx="http://javafx.com/fxml">
+    <VBox spacing="30" style="-fx-background-color: #121212;">
+        <padding><Insets top="20" left="20" right="20" bottom="20"/></padding>
+
+        <VBox spacing="10">
+            <Label text="Morceaux" styleClass="label-header"/>
+            <HBox spacing="15" fx:id="tracksContainer">
+            </HBox>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Albums" styleClass="label-header"/>
+            <HBox spacing="15" fx:id="albumsContainer">
+            </HBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

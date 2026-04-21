@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox alignment="CENTER" spacing="20" style="-fx-background-color: #121212;" xmlns:fx="http://javafx.com/fxml">
+    <Label text="Bienvenue" styleClass="label-header" style="-fx-font-size: 40;"/>
+
+    <VBox spacing="10" alignment="CENTER" maxWidth="300">
+        <TextField promptText="Pseudo"/>
+        <PasswordField promptText="Mot de passe"/>
+        <Button text="Se connecter" maxWidth="Infinity" styleClass="button-primary"/>
+    </VBox>
+
+    <Label text="OU" style="-fx-text-fill: #b3b3b3;"/>
+
+    <Button text="Continuer en Visiteur" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 20;"/>
+</VBox>

@@ -1,0 +1,38 @@
+/* Fond de l'application */
+.root {
+    -fx-background-color: #121212;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* La barre latérale et la barre du haut */
+.side-bar, .top-bar {
+    -fx-background-color: #000000;
+}
+
+/* Boutons style Spotify (Rouge) */
+.button-primary {
+    -fx-background-color: #d32f2f;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.button-primary:hover {
+    -fx-background-color: #ff5252;
+}
+
+/* Titres */
+.label-header {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Champ de recherche */
+.text-field {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-prompt-text-fill: #b3b3b3;
+}

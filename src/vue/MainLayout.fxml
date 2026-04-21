@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="mainContainer" stylesheets="@styles.css" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.MainController">
+   <top>
+      <HBox spacing="20" alignment="CENTER_LEFT" styleClass="top-bar">
+         <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
+         <Button text="Accueil" styleClass="button-primary" onAction="#showHome"/>
+         <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="300"/>
+         <Region HBox.hgrow="ALWAYS" />
+         <Label fx:id="userLabel" text="Visiteur" style="-fx-text-fill: white;"/>
+      </HBox>
+   </top>
+
+   <left>
+      <VBox fx:id="sideMenu" spacing="15" prefWidth="200" styleClass="side-bar">
+         <padding><Insets top="20" left="15"/></padding>
+      </VBox>
+   </left>
+
+   <center>
+      <StackPane fx:id="contentArea" />
+   </center>
+
+</BorderPane>

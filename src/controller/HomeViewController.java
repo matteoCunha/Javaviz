@@ -19,11 +19,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class HomeViewController {
-
     private Connection conn;
+    private MainController mainController;
     @FXML private HBox tracksContainer;
     @FXML private HBox albumsContainer;
     @FXML private HBox artistsContainer;
+
+    public void setMainController(MainController c) { this.mainController = c; }
 
     @FXML
     public void initialize() {
@@ -142,7 +144,7 @@ public class HomeViewController {
         Label lblArtiste;
         if(album != null) {
             lblTitre = new Label(album.getName());
-            lblArtiste = new Label(album.getArtistName());
+            lblArtiste = new Label(album.getSubtitle());
         } else {
             lblTitre = new Label("Inconnu");
             lblArtiste = new Label("Inconnu");
@@ -156,7 +158,11 @@ public class HomeViewController {
         card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #181818; -fx-background-radius: 10;"));
         card.setUserData(album);
         card.setOnMouseClicked(e -> {
-            System.out.println("Lecture de : " + lblTitre.getText());
+            try {
+                mainController.consultAlbum((Album) card.getUserData());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         return card;

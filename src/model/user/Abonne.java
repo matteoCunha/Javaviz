@@ -23,6 +23,8 @@ public class Abonne extends CompteConnecte {
     @Override
     public int getId() { return this.id; }
 
+    public String getName() { return this.pseudo; }
+
     public void setPlaylist(List<Playlist> list) { this.playlist = list; }
     public void printPlay() {
         for(int i = 0; i < this.playlist.size(); i++) {

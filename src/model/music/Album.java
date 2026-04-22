@@ -48,7 +48,9 @@ public class Album implements Consultable, Recherchable {
     public String getName() { return this.name; }
     public String getArtistName() { if(this.artiste != null) { return this.artiste.getPseudo(); } return ""; }
     public String getGroupName() { if(this.group != null) { return this.group.getName(); } return ""; }
+    public LocalDate getDateCreation() { return this.dateCreation; }
     public java.sql.Date getSqlDate() { return Date.valueOf(this.dateCreation); }
+    public List<Morceau> getMorceauList() { return this.morceauList; }
 
 
     // ------------ Partie interface Consultable -------------------
@@ -57,7 +59,7 @@ public class Album implements Consultable, Recherchable {
 
     @Override
     public String getSubtitle(){
-        if (this.artiste != null) { return "Artiste : " + this.artiste.getPseudo(); }
+        if (this.artiste != null) { return this.artiste.getPseudo(); }
         else if (this.group != null) { return "Group : " + this.group.getName(); }
         return "Inconnu";
     }

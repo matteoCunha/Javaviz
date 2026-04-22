@@ -31,7 +31,6 @@ public class UserRepository {
         System.out.println("--- 1. DEBUT DU FETCH ---");
         System.out.println("Recherche du pseudo : [" + pseudo + "]");
 
-        // ATTENTION : Mets bien le nom de ta table ici ("User" avec les guillemets ou users)
         String query = "SELECT * FROM users  WHERE pseudo = ?";
         PreparedStatement p = conn.prepareStatement(query);
         p.setString(1, pseudo);

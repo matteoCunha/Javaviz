@@ -2,15 +2,19 @@ package model.music;
 
 import model.interfaces.Consultable;
 import model.interfaces.Recherchable;
+import model.repository.ArtistRepository;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Group implements Consultable, Recherchable {
     private int id;
     private LocalDate dateCreation;
     private String description;
     private String name;
+    private ArtistRepository artistsRepo;
+    private List<Artiste> artisteList;
 
     public Group(int id, LocalDate dateCreation, String description, String name) {
         this.id = id;

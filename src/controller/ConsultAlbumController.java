@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.tools.javac.Main;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -9,6 +10,7 @@ import javafx.scene.layout.VBox;
 import model.music.Album;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javafx.fxml.FXML;
@@ -19,6 +21,11 @@ public class ConsultAlbumController {
     @FXML private Label albumTitle, artistName, albumYear, trackCount;
     @FXML private VBox trackListContainer;
     private Connection conn;
+    private MainController mainController;
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
 
     public void setAlbumData(Album album, Connection connection) {
         this.conn = connection;
@@ -70,7 +77,13 @@ public class ConsultAlbumController {
 
         row.setOnMouseEntered(e -> row.setStyle("-fx-background-color: #282828; -fx-background-radius: 5;"));
         row.setOnMouseExited(e -> row.setStyle("-fx-background-color: transparent;"));
-        row.setOnMouseClicked(e -> System.out.println("Lecture de : " + m.getTitre()));
+        row.setOnMouseClicked(e -> {
+            try {
+                mainController.lancerMusique(m);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         return row;
     }

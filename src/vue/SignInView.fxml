@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox fx:controller="controller.SignInController"
+      alignment="CENTER" spacing="20"
+      style="-fx-background-color: #121212;"
+      xmlns:fx="http://javafx.com/fxml">
+
+    <Label text="Inscription" style="-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;"/>
+
+    <VBox spacing="15" alignment="CENTER" maxWidth="300">
+        <TextField fx:id="pseudoField" promptText="Pseudo" styleClass="text-field"/>
+        <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="text-field"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" styleClass="text-field"/>
+        <Label fx:id="errorLabel" textFill="#ff5252" visible="false" wrapText="true"/>
+        <Label fx:id="successLabel" textFill="#04ff02" visible="false"/>
+        <Button text="Créer mon compte" maxWidth="Infinity" styleClass="button-primary" onAction="#handleSignUp"/>
+    </VBox>
+
+    <Label text="OU" style="-fx-text-fill: #b3b3b3;"/>
+
+    <Button text="Déjà un compte ? Se connecter"
+            style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 20; -fx-cursor: hand;"
+            onAction="#switchToLogin"/>
+</VBox>

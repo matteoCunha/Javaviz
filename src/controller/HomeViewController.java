@@ -122,7 +122,11 @@ public class HomeViewController {
         card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #181818; -fx-background-radius: 10;"));
         card.setUserData(morceau);
         card.setOnMouseClicked(e -> {
-            System.out.println("Lecture de : " + lblTitre.getText());
+            try {
+                mainController.lancerMusique((Morceau) card.getUserData());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         return card;
@@ -149,6 +153,7 @@ public class HomeViewController {
             lblTitre = new Label("Inconnu");
             lblArtiste = new Label("Inconnu");
         }
+
         lblTitre.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
         lblArtiste.setStyle("-fx-text-fill: #b3b3b3; -fx-font-size: 12px;");
 

@@ -21,4 +21,5 @@ public class Playlist {
     public SequenceDeMusique getSequence () { return this.sequence; }
     public int getId() { return this.id; }
     public String getName() { return this.name; }
+    public Boolean isPublic() { return this.isPublic; }
 }

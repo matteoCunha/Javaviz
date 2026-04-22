@@ -2,6 +2,7 @@ package model.repository;
 import model.music.Artiste;
 import model.music.Group;
 import model.music.Morceau;
+import model.user.Abonne;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -131,6 +132,15 @@ public class MorceauRepository {
         p.setInt(3, m.getId());
 
         int rs = p.executeUpdate();
+    }
+
+    public void updateHistorique(Abonne abonne, Morceau m) throws SQLException{
+        String sqlInsert = "INSERT INTO historique_ecoutes (user_id, morceau_id, date_ecoute) VALUES (?, ?, NOW())";
+        PreparedStatement p = conn.prepareStatement(sqlInsert);
+        p.setInt(1, abonne.getId());
+        p.setInt(2, m.getId());
+
+        int r = p.executeUpdate();
     }
 }
 

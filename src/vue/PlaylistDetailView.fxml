@@ -5,47 +5,45 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane fx:controller="controller.ConsultAlbumController"
+<ScrollPane fx:controller="controller.PlaylistDetailController"
             fitToWidth="true" hbarPolicy="NEVER"
             style="-fx-background-color: transparent; -fx-background: transparent;"
             xmlns:fx="http://javafx.com/fxml">
 
     <VBox spacing="30" style="-fx-background-color: #121212;">
         <padding><Insets top="30" left="30" right="30" bottom="50"/></padding>
+
         <HBox spacing="30" alignment="BOTTOM_LEFT">
-            <Rectangle fx:id="albumCover" width="200" height="200" arcWidth="20" arcHeight="20" fill="#d32f2f" />
+            <Rectangle width="200" height="200" arcWidth="20" arcHeight="20" fill="#282828" />
 
             <VBox spacing="10">
-                <Label text="ALBUM" style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"/>
-                <Label fx:id="albumTitle" text="Nom de l'Album"
+                <Label fx:id="statusLabel" text="PLAYLIST PUBLIQUE" style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                <Label fx:id="playlistTitle" text="Nom de la Playlist"
                        style="-fx-text-fill: white; -fx-font-size: 48; -fx-font-weight: bold;"/>
 
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label fx:id="artistName" text="Nom de l'Artiste"
+                    <Label fx:id="creatorName" text="Créée par..."
                            style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                     <Label text="•" style="-fx-text-fill: #b3b3b3;"/>
-                    <Label fx:id="albumYear" text="2024" style="-fx-text-fill: #b3b3b3;"/>
-                    <Label text="•" style="-fx-text-fill: #b3b3b3;"/>
-                    <Label fx:id="trackCount" text="12 titres" style="-fx-text-fill: #b3b3b3;"/>
+                    <Label fx:id="trackCount" text="0 titres" style="-fx-text-fill: #b3b3b3;"/>
                 </HBox>
             </VBox>
         </HBox>
+
         <HBox spacing="20" alignment="CENTER_LEFT">
             <Button text="▶" style="-fx-background-color: #d32f2f; -fx-text-fill: white;
                                    -fx-font-size: 24; -fx-background-radius: 50;
                                    -fx-pref-width: 60; -fx-pref-height: 60; -fx-cursor: hand;"/>
-            <Button text="♡" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3;
-                                   -fx-font-size: 30; -fx-cursor: hand;"/>
         </HBox>
+
         <VBox spacing="5">
-            <HBox spacing="10" style="-fx-padding: 0 10 10 10; -fx-border-color: #282828;
-                                     -fx-border-width: 0 0 1 0;">
+            <HBox spacing="10" style="-fx-padding: 0 10 10 10; -fx-border-color: #282828; -fx-border-width: 0 0 1 0;">
                 <Label text="#" prefWidth="30" style="-fx-text-fill: #b3b3b3;"/>
                 <Label text="TITRE" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-text-fill: #b3b3b3;"/>
-                <Label text="DURÉE" prefWidth="80" alignment="CENTER_RIGHT" style="-fx-text-fill: #b3b3b3;"/>
+                <Label text="ACTIONS" prefWidth="80" alignment="CENTER" style="-fx-text-fill: #b3b3b3;"/>
             </HBox>
-            <VBox fx:id="trackListContainer" spacing="2" style="-fx-padding: 10 0 0 0;">
-            </VBox>
+
+            <VBox fx:id="trackListContainer" spacing="2" style="-fx-padding: 10 0 0 0;" />
         </VBox>
     </VBox>
 </ScrollPane>

@@ -8,7 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
 import model.music.Album;
+import model.music.Morceau;
 import model.music.Playlist;
 import model.repository.DatabaseConnection;
 import model.repository.MorceauRepository;
@@ -26,16 +28,29 @@ import java.util.List;
 public class MainController {
     Connection conn;
     User utilisateur; // utilisation si besoin utilisation du polymorphisme pour le passer en Abonne, Visiteur ou admin
-
+    //TODO : Recherche et renvoyer les albums/artistes/morceaux etc
+    //TODO : ajouter d'autres morceaux albums et groupes (au moins 5 groupes de plus et 5 albums de plus)
+    //TODO : Pouvoir afficher l'historique d'écoute, a voir si sous forme de playlist, album on un autre view
+    //TODO : Ajouter les deux fonctions supplémentaire a voir quoi encore
+    //TODO : ajouter les nombre d'écoutes pour chaques morceaux pour les stats coté admin
+    //TODO : faire l'interface coté administrateur avec ajout/suppression de morceaux albums etc...
+    //TODO : ajouter un son lors du lancement d'une musique (peut être toujours le même) et un son non copyright
     @FXML private StackPane contentArea;
     @FXML private VBox sideMenu;
     @FXML private Label userLabel;
     @FXML private HBox authContainer;
     @FXML private HBox userProfileContainer;
+    @FXML private PlayerViewController playerViewController;
 
     public MainController() throws SQLException {
         this.conn = DatabaseConnection.getConnection();
         utilisateur = new Visiteur();
+    }
+
+    public void lancerMusique(Morceau m) throws SQLException {
+        if (playerViewController != null) {
+            playerViewController.jouerMorceau(m);
+        }
     }
 
     public void setUtilisateur(User user) { this.utilisateur = user; }
@@ -46,15 +61,14 @@ public class MainController {
             authContainer.setVisible(true);
             userProfileContainer.setVisible(false);
         } else {
-            // Mode Connecté
             authContainer.setVisible(false);
             userProfileContainer.setVisible(true);
             if (user instanceof Abonne) {
-                userLabel.setText(((Abonne) user).getPseudo() + " Connecté");
+                userLabel.setText(((Abonne) user).getPseudo());
                 setUtilisateur((Abonne) user);
             } else {
                 setUtilisateur((Admin) user);
-                userLabel.setText("Administrateur Connecté");
+                userLabel.setText("Administrateur Mode");
             }
         }
         try {
@@ -66,6 +80,9 @@ public class MainController {
 
     @FXML
     public void initialize() throws SQLException {
+        if (playerViewController != null) {
+            playerViewController.setMainController(this);
+        }
         showHome();
         updateSideMenu();
     }
@@ -82,7 +99,34 @@ public class MainController {
 
     @FXML
     public void showSignUp() {
-        System.out.println("Ouvrir la page d'inscription...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/SignInView.fxml"));
+            Node view = loader.load();
+
+            SignInController controller = loader.getController();
+            controller.setMainController(this);
+            controller.setConnection(conn);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : consult album");
+            e.printStackTrace();
+        }
+    }
+
+    public void showPlaylistDetail(Playlist playlist) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/PlaylistDetailView.fxml"));
+            Node view = loader.load();
+
+            PlaylistDetailController controller = loader.getController();
+            controller.setPlaylistData(playlist, this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur chargement PlaylistDetailView");
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -97,7 +141,8 @@ public class MainController {
             Node view = loader.load();
 
             ConsultAlbumController controller = loader.getController();
-            controller.setAlbumData(album, conn);
+            controller.setMainController(this);
+            controller.setAlbumData(album, this.conn);
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             System.err.println("Erreur lors du chargement de la vue : consult album");
@@ -150,9 +195,9 @@ public class MainController {
                 String styleNormal = "-fx-background-color: #1a1a1a; " +
                         "-fx-text-fill: #b3b3b3; " +
                         "-fx-alignment: CENTER_LEFT; " +
-                        "-fx-padding: 10 15 10 15; " + // Marges : Haut, Droite, Bas, Gauche
+                        "-fx-padding: 10 15 10 15; " +
                         "-fx-background-radius: 5; " +
-                        "-fx-pref-width: 200; " +
+                        "-fx-pref-width: 170; " +
                         "-fx-cursor: hand; " +
                         "-fx-font-weight: bold;";
 
@@ -161,7 +206,7 @@ public class MainController {
                         "-fx-alignment: CENTER_LEFT; " +
                         "-fx-padding: 10 15 10 15; " +
                         "-fx-background-radius: 5; " +
-                        "-fx-pref-width: 200; " +
+                        "-fx-pref-width: 170; " +
                         "-fx-cursor: hand; " +
                         "-fx-font-weight: bold;";
 
@@ -171,10 +216,8 @@ public class MainController {
 
                 playlistBtn.setOnAction(event -> {
                     Playlist clickedPlaylist = (Playlist) playlistBtn.getUserData();
-                    System.out.println("Ouverture de la playlist : " + clickedPlaylist.getName() + " (ID: " + clickedPlaylist.getId() + ")");
-                    // showPlaylistDetails(clickedPlaylist);
+                    showPlaylistDetail(clickedPlaylist);
                 });
-
                 sideMenu.getChildren().add(playlistBtn);
             }
         }

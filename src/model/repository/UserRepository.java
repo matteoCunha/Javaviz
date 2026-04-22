@@ -18,7 +18,7 @@ public class UserRepository {
         int id = rs.getInt("id");
         String pseudo = rs.getString("pseudo");
         String password = rs.getString("password");
-        boolean isAdmin = rs.getBoolean("isAdmin");
+        boolean isAdmin = rs.getBoolean("isadmin");
 
         if (isAdmin) {
             return new Admin(pseudo, password, id);
@@ -44,6 +44,32 @@ public class UserRepository {
             System.out.println("--- 2. ERREUR : PSEUDO INTROUVABLE EN BASE ---");
             return null;
         }
+    }
+
+    public boolean addNewAbonne(String pseudo, String password) throws SQLException {
+        String query = "INSERT INTO users (pseudo, password, isAdmin) VALUES (?, ?, FALSE)";
+        try (PreparedStatement p = conn.prepareStatement(query)) {
+            p.setString(1, pseudo);
+            p.setString(2, password);
+
+            int lignesAjoutees = p.executeUpdate();
+            return lignesAjoutees > 0;
+        }
+    }
+
+    public boolean pseudoExisteDeja(String pseudo) throws SQLException {
+        String query = "SELECT COUNT(*) FROM users WHERE pseudo = ?";
+
+        try (PreparedStatement p = conn.prepareStatement(query)) {
+            p.setString(1, pseudo);
+            ResultSet rs = p.executeQuery();
+
+            if (rs.next()) {
+                int n = rs.getInt(1);
+                return n > 0;
+            }
+        }
+        return false;
     }
 }
 

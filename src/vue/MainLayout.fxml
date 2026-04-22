@@ -2,6 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.SVGPath?>
 
 <BorderPane fx:id="mainContainer" stylesheets="@styles.css" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.MainController">
    <top>
@@ -19,7 +20,13 @@
             </HBox>
 
             <HBox fx:id="userProfileContainer" spacing="15" alignment="CENTER" visible="false">
-               <Label fx:id="userLabel" text="Pseudo" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+
+               <Label fx:id="userLabel" text="Pseudo" style="-fx-text-fill: white; -fx-font-weight: bold;">
+                  <graphic>
+                     <SVGPath content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                              fill="#b3b3b3" />
+                  </graphic>
+               </Label>
                <Button text="Déconnexion" style="-fx-background-color: transparent; -fx-text-fill: #d32f2f; -fx-cursor: hand; -fx-border-color: #d32f2f; -fx-border-radius: 20;" onAction="#logout"/>
             </HBox>
          </StackPane>
@@ -36,4 +43,7 @@
       <StackPane fx:id="contentArea" />
    </center>
 
+   <bottom>
+      <fx:include fx:id="playerView" source="PlayerView.fxml" />
+   </bottom>
 </BorderPane>

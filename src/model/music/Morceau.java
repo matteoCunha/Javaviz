@@ -71,6 +71,8 @@ public class Morceau implements Recherchable {
     public int getNb_ecoutes() { return nb_ecoutes; }
     public void setNb_ecoutes(int n) { this.nb_ecoutes = n; }
 
+    public int getTime() { return this.temps; }
+
     public String getAutorName() {
         if (this.artiste != null) {
             return this.artiste.getPseudo();

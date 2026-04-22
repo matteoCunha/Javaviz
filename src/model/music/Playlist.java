@@ -20,4 +20,5 @@ public class Playlist {
     public void printSequence() { sequence.printPlaylist(); }
     public SequenceDeMusique getSequence () { return this.sequence; }
     public int getId() { return this.id; }
+    public String getName() { return this.name; }
 }

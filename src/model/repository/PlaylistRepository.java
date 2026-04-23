@@ -48,7 +48,7 @@ public class PlaylistRepository {
         while(rs.next()) {
             int id = rs.getInt("id");
             String name = rs.getString("nom");
-            boolean isPublic = rs.getBoolean("isPublic");
+            boolean isPublic = rs.getBoolean("ispublic");
             SequenceDeMusique seq = creationSequenceFromId(id);
             list.add(new Playlist(id, name, isPublic, abonne, seq));
         }

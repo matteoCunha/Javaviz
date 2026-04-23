@@ -27,13 +27,13 @@ public class MorceauRepository {
         if(!rs.wasNull()) {
             ArtistRepository art = new ArtistRepository(conn);
             Artiste artiste = art.fetchById(artisteId);
-            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"));
+            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getInt("nb_ecoutes"));
         }
 
         int groupId = rs.getInt("group_id");
         GroupRepository groupRepository = new GroupRepository(conn);
         Group group = groupRepository.fetchById(groupId);
-        return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"));
+        return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getInt("nb_ecoutes"));
     }
 
     public Morceau createFromSQLPlaylist(ResultSet rs) throws SQLException {
@@ -116,6 +116,32 @@ public class MorceauRepository {
         String query = "SELECT * FROM morceau ORDER BY nb_ecoutes DESC LIMIT ?";
         PreparedStatement p = conn.prepareStatement(query);
         p.setInt(1, 5);
+
+        ResultSet rs = p.executeQuery();
+
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
+        return list;
+    }
+
+    public List<Morceau> fetchTop5ByArtist(Artiste artiste) throws SQLException {
+        String query = "SELECT * FROM morceau WHERE artiste_id = ? ORDER BY nb_ecoutes DESC LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, artiste.getId());
+        p.setInt(2, 5);
+
+        ResultSet rs = p.executeQuery();
+
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
+        return list;
+    }
+
+    public List<Morceau> fetchTop5ByGroup(Group group) throws SQLException {
+        String query = "SELECT * FROM morceau WHERE group_id = ? ORDER BY nb_ecoutes DESC LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, group.getId());
+        p.setInt(2, 5);
 
         ResultSet rs = p.executeQuery();
 

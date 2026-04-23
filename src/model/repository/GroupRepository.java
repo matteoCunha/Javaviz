@@ -49,6 +49,18 @@ public class GroupRepository {
         return list;
     }
 
+    public List<Group> fetchHomeGroups() throws SQLException {
+        String query = "SELECT * FROM groupe ORDER BY date_creation DESC LIMIT ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, 5);
+
+        List<Group> list = new ArrayList<>();
+        ResultSet rs = p.executeQuery();
+
+        while(rs.next()) { list.add(createGroupFromsql(rs)); }
+        return list;
+    }
+
     public void updateGroup(Group g) throws SQLException {
         String query = "UPDATE groupe SET date_creation = ?, name = ?, description = ? WHERE id = ?";
         PreparedStatement p = conn.prepareStatement(query);

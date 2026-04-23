@@ -13,7 +13,7 @@ public class MainGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/MainLayout.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 1000, 700); // Taille initiale de la fenêtre
+        Scene scene = new Scene(root, 1100, 700); // Taille initiale de la fenêtre
 
         primaryStage.setTitle("Mon Spotify - Dark Red Edition");
         primaryStage.setScene(scene);

@@ -5,16 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import model.music.Album;
-import model.music.Morceau;
-import model.music.Playlist;
-import model.repository.DatabaseConnection;
-import model.repository.MorceauRepository;
-import model.repository.PlaylistRepository;
+import model.music.*;
+import model.repository.*;
 import model.user.Abonne;
 import model.user.Admin;
 import model.user.User;
@@ -28,8 +25,8 @@ import java.util.List;
 public class MainController {
     Connection conn;
     User utilisateur; // utilisation si besoin utilisation du polymorphisme pour le passer en Abonne, Visiteur ou admin
-    //TODO : Recherche et renvoyer les albums/artistes/morceaux etc
-    //TODO : ajouter d'autres morceaux albums et groupes (au moins 5 groupes de plus et 5 albums de plus)
+    //DONE : Recherche et renvoyer les albums/artistes/morceaux etc FAIT
+    //DONE : ajouter d'autres morceaux albums et groupes (au moins 5 groupes de plus et 5 albums de plus)
     //TODO : Pouvoir afficher l'historique d'écoute, a voir si sous forme de playlist, album on un autre view
     //TODO : Ajouter les deux fonctions supplémentaire a voir quoi encore
     //TODO : ajouter les nombre d'écoutes pour chaques morceaux pour les stats coté admin
@@ -41,6 +38,7 @@ public class MainController {
     @FXML private HBox authContainer;
     @FXML private HBox userProfileContainer;
     @FXML private PlayerViewController playerViewController;
+    @FXML private TextField searchField;
 
     public MainController() throws SQLException {
         this.conn = DatabaseConnection.getConnection();
@@ -83,6 +81,16 @@ public class MainController {
         if (playerViewController != null) {
             playerViewController.setMainController(this);
         }
+        searchField.setOnAction(event -> {
+            String requete = searchField.getText();
+            if (!requete.isEmpty()) {
+                try {
+                    lancerGlobalSearch(requete);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         showHome();
         updateSideMenu();
     }
@@ -109,7 +117,7 @@ public class MainController {
 
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
-            System.err.println("Erreur lors du chargement de la vue : consult album");
+            System.err.println("Erreur lors du chargement de la vue : sign up");
             e.printStackTrace();
         }
     }
@@ -125,6 +133,36 @@ public class MainController {
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             System.err.println("Erreur chargement PlaylistDetailView");
+            e.printStackTrace();
+        }
+    }
+
+    public void showArtistDetail(Artiste artiste) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/ArtistView.fxml"));
+            Node view = loader.load();
+
+            ArtistViewController controller = loader.getController();
+            controller.setArtistData(artiste, this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException | SQLException e) {
+            System.err.println("Erreur chargement Artist view");
+            e.printStackTrace();
+        }
+    }
+
+    public void showGroupDetail(Group group) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/GroupView.fxml"));
+            Node view = loader.load();
+
+            GroupViewController controller = loader.getController();
+            controller.setArtistData(group, this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException | SQLException e) {
+            System.err.println("Erreur chargement Group View");
             e.printStackTrace();
         }
     }
@@ -146,6 +184,21 @@ public class MainController {
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             System.err.println("Erreur lors du chargement de la vue : consult album");
+            e.printStackTrace();
+        }
+    }
+
+    public void showSearchView(SearchResult results, String query) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/SearchView.fxml"));
+            Node view = loader.load();
+
+            SearchViewController controller = loader.getController();
+            controller.setResults(results, query, this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : search view");
             e.printStackTrace();
         }
     }
@@ -220,6 +273,22 @@ public class MainController {
                 });
                 sideMenu.getChildren().add(playlistBtn);
             }
+        }
+    }
+
+    private void lancerGlobalSearch(String query) throws SQLException {
+        try {
+            MorceauRepository morceauRepository = new MorceauRepository(this.conn);
+            ArtistRepository artistRepository = new ArtistRepository(this.conn);
+            AlbumRepository albumRepository = new AlbumRepository(this.conn);
+            GroupRepository groupRepository = new GroupRepository(this.conn);
+
+            SearchResult result = new SearchResult(morceauRepository, artistRepository, albumRepository, groupRepository);
+            result.globalSearch(query);
+            showSearchView(result, query);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

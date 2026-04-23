@@ -49,6 +49,7 @@ public class PlayerViewController {
         MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
 
         trackTitle.setText(morceau.getTitre());
+        artistName.setText(morceau.getAutorName());
         tempEcoule = 0;
 
         timeSlider.setMin(0);

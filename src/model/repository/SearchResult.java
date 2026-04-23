@@ -2,7 +2,6 @@ package model.repository;
 
 import model.music.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,7 +9,7 @@ public class SearchResult {
     private List<Morceau> morceaux;
     private List<Artiste> artistes;
     private List<Album> albums;
-    private List<Playlist> publicPlaylist;
+    private List<Group> groups;
     private MorceauRepository morceauRepository;
     private ArtistRepository artistRepository;
     private AlbumRepository albumRepository;
@@ -21,29 +20,20 @@ public class SearchResult {
         this.albumRepository = alb; this.groupRepository = g;
     }
 
-    public SearchResult globalSearch(String query) throws SQLException {
-
+    public void globalSearch(String query) throws SQLException {
         List<Morceau> morceaux = morceauRepository.fetchByName(query, 5);
         List<Artiste> artistes = artistRepository.searchByName(query, 3);
         List<Album> albums = albumRepository.searchByName(query, 2);
         List<Group> groups = groupRepository.searchByName(query, 2);
 
-        for (Morceau morceau : morceaux) {
-            System.out.println(morceau.getContent());
-        }
-
-        for (Artiste artiste : artistes) {
-            System.out.println(artiste.getContent());
-        }
-
-        for (Album album : albums) {
-            System.out.println(album.getContent());
-        }
-
-        for (Group group : groups) {
-            System.out.println(group.getContent());
-        }
-
-        return null;
+        this.morceaux = morceaux;
+        this.artistes = artistes;
+        this.albums = albums;
+        this.groups = groups;
     }
+
+    public List<Morceau> getMorceaux() { return morceaux; }
+    public List<Artiste> getArtistes() { return artistes; }
+    public List<Album> getAlbums() { return albums; }
+    public List<Group> getGroups() { return groups; }
 }

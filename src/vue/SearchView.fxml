@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fx:id="searchScrollPane" fitToWidth="true" hbarPolicy="NEVER"
+            style="-fx-background-color: transparent; -fx-background: transparent;"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="controller.SearchViewController">
+
+    <VBox spacing="30" style="-fx-background-color: #121212;">
+        <padding>
+            <Insets top="30" left="30" right="30" bottom="50"/>
+        </padding>
+
+        <Label fx:id="searchTitleLabel" text="Résultats pour..."
+               style="-fx-text-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
+
+        <VBox spacing="10">
+            <Label text="Morceaux" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+            <VBox fx:id="tracksContainer" spacing="5" style="-fx-padding: 10 0 0 0;">
+            </VBox>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Albums" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+            <FlowPane fx:id="albumsContainer" hgap="20" vgap="20">
+            </FlowPane>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Artistes et Groupes" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+            <FlowPane fx:id="artistsContainer" hgap="20" vgap="20">
+            </FlowPane>
+        </VBox>
+    </VBox>
+</ScrollPane>

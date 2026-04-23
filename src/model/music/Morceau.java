@@ -17,7 +17,7 @@ public class Morceau implements Recherchable {
     private String titre;
     private int position; // peut être null -> sert uniquement pour les playlists
 
-    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste) {
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.artiste = artiste;
@@ -25,9 +25,10 @@ public class Morceau implements Recherchable {
         this.genre = genre;
         this.titre = titre;
         this.numero_piste = numero_piste;
+        this.nb_ecoutes = n;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int position) {
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int position, int n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.artiste = artiste;
@@ -36,9 +37,10 @@ public class Morceau implements Recherchable {
         this.titre = titre;
         this.numero_piste = numero_piste;
         this.position = position;
+        this.nb_ecoutes = n;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste) {
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.group = group;
@@ -46,9 +48,10 @@ public class Morceau implements Recherchable {
         this.genre = genre;
         this.titre = titre;
         this.numero_piste = numero_piste;
+        this.nb_ecoutes = n;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int position) {
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int position, int n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.group = group;
@@ -57,6 +60,7 @@ public class Morceau implements Recherchable {
         this.titre = titre;
         this.numero_piste = numero_piste;
         this.position = position;
+        this.nb_ecoutes = n;
     }
 
     public void ajouterEcoute() { this.nb_ecoutes++; }

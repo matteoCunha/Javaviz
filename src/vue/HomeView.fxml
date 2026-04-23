@@ -22,7 +22,13 @@
 
         <VBox spacing="10">
             <Label text="Artistes" styleClass="label-header"/>
-            <HBox spacing="15" fx:id="artistsContainer" /> </VBox>
+            <HBox spacing="15" fx:id="artistsContainer" />
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Groupes" styleClass="label-header"/>
+            <HBox spacing="15" fx:id="groupContainer" />
+        </VBox>
 
     </VBox>
 </ScrollPane>

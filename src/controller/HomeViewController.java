@@ -9,9 +9,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.geometry.Insets;
 import model.music.Album;
 import model.music.Artiste;
+import model.music.Group;
 import model.music.Morceau;
 import model.repository.AlbumRepository;
 import model.repository.ArtistRepository;
+import model.repository.GroupRepository;
 import model.repository.MorceauRepository;
 
 import java.sql.Connection;
@@ -24,6 +26,7 @@ public class HomeViewController {
     @FXML private HBox tracksContainer;
     @FXML private HBox albumsContainer;
     @FXML private HBox artistsContainer;
+    @FXML private HBox groupContainer;
 
     public void setMainController(MainController c) { this.mainController = c; }
 
@@ -85,6 +88,13 @@ public class HomeViewController {
             for (Artiste art : top5) {
                 VBox card = createArtistCard(art);
                 artistsContainer.getChildren().add(card);
+            }
+
+            GroupRepository g = new GroupRepository(this.conn);
+            List<Group> top5groups = g.fetchHomeGroups();
+            for (Group group : top5groups) {
+                VBox card = createGroupCard(group);
+                groupContainer.getChildren().add(card);
             }
         } catch (SQLException e) {
             System.err.println("Erreur lors du chargement des albums : " + e.getMessage());
@@ -204,7 +214,44 @@ public class HomeViewController {
         card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #181818; -fx-background-radius: 10;"));
         card.setUserData(artiste);
         card.setOnMouseClicked(e -> {
-            System.out.println("Lecture de : " + lblTitre.getText());
+            mainController.showArtistDetail(artiste);
+        });
+
+        return card;
+    }
+
+    private VBox createGroupCard(Group group) {
+        VBox card = new VBox(10);
+        card.getStyleClass().add("music-card");
+        card.setPrefWidth(150);
+        card.setPadding(new Insets(10));
+        card.setStyle("-fx-background-color: #181818; -fx-background-radius: 10;");
+
+        Rectangle cover = new Rectangle(130, 130);
+        cover.setArcHeight(15);
+        cover.setArcWidth(15);
+        cover.setFill(Color.web("#d32f2f"));
+
+        Label lblTitre;
+        Label lblArtiste;
+        if(group != null) {
+            lblTitre = new Label(group.getName());
+            lblArtiste = new Label(group.getSubtitle());
+
+        } else {
+            lblTitre = new Label("Inconnu");
+            lblArtiste = new Label("Inconnu");
+        }
+
+        lblTitre.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+        lblArtiste.setStyle("-fx-text-fill: #b3b3b3; -fx-font-size: 12px;");
+
+        card.getChildren().addAll(cover, lblTitre, lblArtiste);
+        card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: #282828; -fx-background-radius: 10;"));
+        card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #181818; -fx-background-radius: 10;"));
+        card.setUserData(group);
+        card.setOnMouseClicked(e -> {
+            mainController.showGroupDetail(group);
         });
 
         return card;

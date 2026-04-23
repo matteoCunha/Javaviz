@@ -47,6 +47,28 @@ public class AlbumRepository {
         return createAlbumFromsql(rs);
     }
 
+    public List<Album> fetchByArtist(Artiste artiste) throws SQLException {
+        String query = "SELECT * FROM album WHERE artiste_id = ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, artiste.getId());
+
+        ResultSet rs = p.executeQuery();
+        List<Album> list = new ArrayList<>();
+        while(rs.next()) { list.add(createAlbumFromsql(rs)); }
+        return list;
+    }
+
+    public List<Album> fetchByGroup(Group group) throws SQLException {
+        String query = "SELECT * FROM album WHERE artiste_id = ?";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.setInt(1, group.getId());
+
+        ResultSet rs = p.executeQuery();
+        List<Album> list = new ArrayList<>();
+        while(rs.next()) { list.add(createAlbumFromsql(rs)); }
+        return list;
+    }
+
     public Album fetchByName(String name) throws SQLException {
         String query = "SELECT * FROM album WHERE name = ?";
         PreparedStatement p = conn.prepareStatement(query);

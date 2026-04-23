@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fx:id="artistScrollPane" fitToWidth="true" hbarPolicy="NEVER"
+            style="-fx-background-color: transparent; -fx-background: transparent;"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="controller.ArtistViewController">
+
+    <VBox spacing="40" style="-fx-background-color: #121212;">
+        <padding>
+            <Insets top="40" left="30" right="30" bottom="50"/>
+        </padding>
+
+        <HBox spacing="30" alignment="BOTTOM_LEFT">
+            <Circle fx:id="artistImage" radius="100" fill="#282828" />
+
+            <VBox spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="ARTISTE VÉRIFIÉ" style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Label text="✓" style="-fx-text-fill: #1db954; -fx-font-weight: bold;"/> </HBox>
+
+                <Label fx:id="artistNameLabel" text="Nom de l'Artiste"
+                       style="-fx-text-fill: white; -fx-font-size: 55; -fx-font-weight: bold;"/>
+
+                <Label fx:id="listenerLabel" text="1 234 567 écoutes" style="-fx-text-fill: #b3b3b3;"/>
+                <Label fx:id="descriptionLabel" text=" " style="-fx-text-fill: white; -fx-font-size: 15;"/>
+
+            </VBox>
+        </HBox>
+
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Button text="▶" style="-fx-background-color: #d32f2f; -fx-text-fill: white;
+                                   -fx-font-size: 24; -fx-background-radius: 50;
+                                   -fx-pref-width: 60; -fx-pref-height: 60; -fx-cursor: hand;"/>
+        </HBox>
+
+        <VBox spacing="10">
+            <Label text="Populaires" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+            <VBox fx:id="topTracksContainer" spacing="2">
+            </VBox>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Discographie" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+            <FlowPane fx:id="albumsContainer" hgap="20" vgap="20">
+            </FlowPane>
+        </VBox>
+    </VBox>
+</ScrollPane>

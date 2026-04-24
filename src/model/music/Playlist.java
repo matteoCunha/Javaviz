@@ -20,6 +20,9 @@ public class Playlist {
     public void printSequence() { sequence.printPlaylist(); }
     public SequenceDeMusique getSequence () { return this.sequence; }
     public int getId() { return this.id; }
+    public int getAbonneId() { return this.createur.getId();}
     public String getName() { return this.name; }
     public Boolean isPublic() { return this.isPublic; }
+
+    public void setId(int n) { this.id = n; }
 }

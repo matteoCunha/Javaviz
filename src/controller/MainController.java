@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -39,6 +40,9 @@ public class MainController {
     @FXML private HBox userProfileContainer;
     @FXML private PlayerViewController playerViewController;
     @FXML private TextField searchField;
+    @FXML private VBox playlistsContainer;
+    @FXML private Button buttonAddPlay;
+    @FXML private Separator separatorAddPlay;
 
     public MainController() throws SQLException {
         this.conn = DatabaseConnection.getConnection();
@@ -134,6 +138,8 @@ public class MainController {
         } catch (IOException e) {
             System.err.println("Erreur chargement PlaylistDetailView");
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -203,6 +209,22 @@ public class MainController {
         }
     }
 
+    @FXML
+    public void showCreatePlaylist() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/CreatePlaylistView.fxml"));
+            Node view = loader.load();
+
+            CreatePlaylistController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : search view");
+            e.printStackTrace();
+        }
+    }
+
     public void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/" + fxmlFile));
@@ -226,16 +248,22 @@ public class MainController {
     }
 
     public void updateSideMenu() throws SQLException{
-        sideMenu.getChildren().clear();
+        playlistsContainer.getChildren().clear();
 
         if (utilisateur instanceof Visiteur) {
+
             Label info = new Label("S'abonner/Se connecter pour\nvoir vos playlists");
             info.setStyle("-fx-text-fill: #b3b3b3; -fx-padding: 10;");
-            sideMenu.getChildren().add(info);
+            playlistsContainer.getChildren().add(info);
+            buttonAddPlay.setVisible(false);
+            separatorAddPlay.setVisible(false);
         } else if (utilisateur instanceof Abonne){
+
             Label titre = new Label("VOS PLAYLISTS");
             titre.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
-            sideMenu.getChildren().add(titre);
+            playlistsContainer.getChildren().add(titre);
+            buttonAddPlay.setVisible(true);
+            separatorAddPlay.setVisible(true);
 
             MorceauRepository m = new MorceauRepository(conn);
             PlaylistRepository p = new PlaylistRepository(conn, m);
@@ -271,7 +299,7 @@ public class MainController {
                     Playlist clickedPlaylist = (Playlist) playlistBtn.getUserData();
                     showPlaylistDetail(clickedPlaylist);
                 });
-                sideMenu.getChildren().add(playlistBtn);
+                playlistsContainer.getChildren().add(playlistBtn);
             }
         }
     }

@@ -5,10 +5,7 @@ import model.music.Playlist;
 import model.music.SequenceDeMusique;
 import model.user.Abonne;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +85,45 @@ public class PlaylistRepository {
             conn.rollback(); throw e;
         } finally {
             conn.setAutoCommit(true);
+        }
+    }
+
+    public Playlist insertNewPlaylist(Playlist playlist) throws SQLException {
+        String insertQuery = "INSERT INTO public.playlist (nom, ispublic, user_id) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, playlist.getName());
+            pstmt.setBoolean(2, playlist.isPublic());
+            pstmt.setLong(3, playlist.getAbonneId());
+
+            int lignesModifiees = pstmt.executeUpdate();
+
+            if (lignesModifiees == 0) {
+                throw new SQLException("Échec de la création de la playlist, aucune ligne affectée.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int nouvelId = generatedKeys.getInt(1);
+                    playlist.setId(nouvelId);
+                } else {
+                    throw new SQLException("Échec de la création, aucun ID retourné.");
+                }
+            }
+        }
+
+        return playlist;
+    }
+
+    public void ajouterMorceauxInPlaylist(int playlistId, int morceauId) throws SQLException {
+        String sql = "INSERT INTO playlist_morceaux (playlist_id, morceaux_id, position) " +
+                "VALUES (?, ?, (SELECT COALESCE(MAX(position), 0) + 1 FROM playlist_morceaux WHERE playlist_id = ?))";
+
+        try (PreparedStatement p = this.conn.prepareStatement(sql)){
+            p.setInt(1, playlistId);
+            p.setInt(2, morceauId);
+            p.setInt(3, playlistId);
+            p.executeUpdate();
         }
     }
 }

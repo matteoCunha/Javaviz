@@ -112,6 +112,17 @@ public class MorceauRepository {
         return list;
     }
 
+    public List<Morceau> fetchAllMorceaux() throws SQLException {
+        String query = "SELECT * FROM morceau";
+        PreparedStatement p = this.conn.prepareStatement(query);
+
+        ResultSet rs = p.executeQuery();
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
+
+        return list;
+    }
+
     public List<Morceau> fetchHomeMorceaux() throws SQLException {
         String query = "SELECT * FROM morceau ORDER BY nb_ecoutes DESC LIMIT ?";
         PreparedStatement p = conn.prepareStatement(query);
@@ -173,7 +184,6 @@ public class MorceauRepository {
 /*
 TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)
 */
-
 //fonction updateMorceau fonctionne
 //TODO: a implémenter -> logique d'update de la base de donnée a la fermeture de l'appli pour enregistrer les possibles modifs
 //TODO: faire les fonctions update pour tous les autres éléments de la DB

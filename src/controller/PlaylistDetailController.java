@@ -1,18 +1,25 @@
 package controller;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+import javafx.util.StringConverter;
 import model.music.Morceau;
 import model.music.Playlist;
 import model.music.SequenceDeMusique;
+import model.repository.MorceauRepository;
+import model.repository.PlaylistRepository;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class PlaylistDetailController {
 
@@ -21,11 +28,24 @@ public class PlaylistDetailController {
     @FXML private Label creatorName;
     @FXML private Label trackCount;
     @FXML private VBox trackListContainer;
+    @FXML private ComboBox<Morceau> trackComboBox;
 
     private Playlist currentPlaylist;
     private MainController mainController;
 
-    public void setPlaylistData(Playlist playlist, MainController main) {
+    private PauseTransition autoSaveTimer = new PauseTransition(Duration.seconds(2));
+
+    public void initialize() {
+        autoSaveTimer.setOnFinished(event -> {
+            try {
+                executeUpdateBatch();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void setPlaylistData(Playlist playlist, MainController main) throws SQLException {
         this.currentPlaylist = playlist;
         this.mainController = main;
 
@@ -33,6 +53,51 @@ public class PlaylistDetailController {
         statusLabel.setText(playlist.isPublic() ? "PLAYLIST PUBLIQUE" : "PLAYLIST PRIVÉE");
 
         loadTracks();
+        chargerCatalogue();
+    }
+
+    public void chargerCatalogue() throws SQLException {
+        try {
+            MorceauRepository morceauRepository = new MorceauRepository(this.mainController.conn);
+            List<Morceau> catalogue = morceauRepository.fetchAllMorceaux();
+
+            trackComboBox.getItems().setAll(catalogue);
+            trackComboBox.setConverter(new StringConverter<Morceau>() {
+                @Override
+                public String toString(Morceau morceau) {
+                    return (morceau != null) ? morceau.getTitre() + " - " + morceau.getAutorName() : "";
+                }
+
+                @Override
+                public Morceau fromString(String s) {
+                    return null;
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void addSelectedTrack() {
+        Morceau choisi = trackComboBox.getValue();
+
+        if (choisi == null) {
+            System.out.println("Veuillez choisir un morceau d'abord.");
+            return;
+        }
+
+        try {
+            PlaylistRepository playlistRepository = new PlaylistRepository(this.mainController.conn, new MorceauRepository(this.mainController.conn));
+            playlistRepository.ajouterMorceauxInPlaylist(currentPlaylist.getId(), choisi.getId());
+
+            currentPlaylist.getSequence().pushBack(choisi);
+            loadTracks();
+            trackComboBox.setValue(null);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadTracks() {
@@ -89,11 +154,15 @@ public class PlaylistDetailController {
         btnUp.setOnAction(event -> {
             currentPlaylist.getSequence().moveUp(noeud);
             loadTracks();
+
+            autoSaveTimer.playFromStart();
         });
 
         btnDown.setOnAction(event -> {
             currentPlaylist.getSequence().moveDown(noeud);
             loadTracks();
+
+            autoSaveTimer.playFromStart();
         });
 
         row.setOnMouseClicked(e -> {
@@ -118,5 +187,12 @@ public class PlaylistDetailController {
         });
 
         return row;
+    }
+
+    public void executeUpdateBatch() throws SQLException {
+        MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
+        PlaylistRepository playlistRepository = new PlaylistRepository(mainController.conn, morceauRepository);
+
+        playlistRepository.updatePlaylist(currentPlaylist);
     }
 }

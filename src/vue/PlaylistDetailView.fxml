@@ -44,6 +44,22 @@
             </HBox>
 
             <VBox fx:id="trackListContainer" spacing="2" style="-fx-padding: 10 0 0 0;" />
+            <Region prefHeight="30" />
+            <Separator style="-fx-background-color: #282828;" />
+            <Region prefHeight="10" />
+
+            <VBox spacing="15">
+                <Label text="Ajouter des morceaux" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="trackComboBox" promptText="Sélectionner un titre à ajouter..."
+                              prefWidth="300" style="-fx-background-color: #282828; -fx-base: #282828;"/>
+
+                    <Button text="AJOUTER" onAction="#addSelectedTrack"
+                            style="-fx-background-color: transparent; -fx-text-fill: white;
+                               -fx-border-color: white; -fx-border-radius: 20;
+                               -fx-padding: 5 15; -fx-cursor: hand; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
         </VBox>
     </VBox>
 </ScrollPane>

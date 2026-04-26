@@ -1,5 +1,6 @@
 package model.repository;
 
+import model.music.Playlist;
 import model.user.Abonne;
 import model.user.Admin;
 import model.user.CompteConnecte;
@@ -86,6 +87,40 @@ public class UserRepository {
         }
         return list;
     }
-}
 
-//TODO : fonction update
+    public void deleteAbonne(Abonne a) throws SQLException {
+        boolean autoCommitPrecedent = this.conn.getAutoCommit();
+        this.conn.setAutoCommit(false);
+
+        try {
+            if (a.getPlaylists() != null) {
+                PlaylistRepository playlistRepository = new PlaylistRepository(this.conn, new MorceauRepository(this.conn));
+                for (Playlist p : a.getPlaylists()) {
+                    playlistRepository.deletePlaylist(p);
+                }
+            }
+
+            String sqlHist = "DELETE FROM historique_ecoutes WHERE user_id = ?";
+            try (PreparedStatement pHist = this.conn.prepareStatement(sqlHist)) {
+                pHist.setLong(1, a.getId());
+                pHist.executeUpdate();
+            }
+
+            String sqlDel = "DELETE FROM users WHERE id = ?";
+            try (PreparedStatement pDel = this.conn.prepareStatement(sqlDel)) {
+                pDel.setLong(1, a.getId());
+                pDel.executeUpdate();
+            }
+
+            this.conn.commit();
+            System.out.println("Abonné supprimé avec succès !");
+
+        } catch (SQLException e) {
+            this.conn.rollback();
+            System.err.println("Erreur lors de la suppression de l'abonné. Annulation.");
+            throw e;
+        } finally {
+            this.conn.setAutoCommit(autoCommitPrecedent);
+        }
+    }
+}

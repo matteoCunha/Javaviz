@@ -34,7 +34,8 @@
         <HBox spacing="20" alignment="CENTER_LEFT">
             <Button text="▶" style="-fx-background-color: #d32f2f; -fx-text-fill: white;
                                    -fx-font-size: 24; -fx-background-radius: 50;
-                                   -fx-pref-width: 60; -fx-pref-height: 60; -fx-cursor: hand;"/>
+                                   -fx-pref-width: 60; -fx-pref-height: 60; -fx-cursor: hand;"
+                    onAction="#jouerPremierMorceau"/>
         </HBox>
 
         <VBox spacing="10">

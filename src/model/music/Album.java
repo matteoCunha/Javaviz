@@ -55,6 +55,10 @@ public class Album implements Consultable, Recherchable {
     public Artiste getArtiste() { return this.artiste; }
     public Group getGroup() { return this.group; }
 
+    public String toString() {
+        return this.name;
+    }
+
 
     // ------------ Partie interface Consultable -------------------
     @Override

@@ -53,6 +53,7 @@ public class LoginViewController {
         }
         if (user instanceof Abonne || user instanceof Admin) {
             mainController.updateSessionState(user);
+            mainController.updateTopBar();
             mainController.showHome();
         }
 

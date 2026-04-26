@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="30" style="-fx-background-color: #121212; -fx-padding: 40;"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.AdminStatsController">
+
+    <Label text="📊 Tableau de Bord Administrateur" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="20" vgap="20">
+        <VBox alignment="CENTER" prefWidth="200" prefHeight="120" style="-fx-background-color: #282828; -fx-background-radius: 10;" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label fx:id="lblUsers" text="0" style="-fx-text-fill: #1db954; -fx-font-size: 40; -fx-font-weight: bold;"/>
+            <Label text="Abonnés" style="-fx-text-fill: #b3b3b3; -fx-font-size: 16;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="200" prefHeight="120" style="-fx-background-color: #282828; -fx-background-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label fx:id="lblEcoutes" text="0" style="-fx-text-fill: #d32f2f; -fx-font-size: 40; -fx-font-weight: bold;"/>
+            <Label text="Écoutes totales" style="-fx-text-fill: #b3b3b3; -fx-font-size: 16;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="200" prefHeight="120" style="-fx-background-color: #282828; -fx-background-radius: 10;" GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <Label fx:id="lblMorceaux" text="0" style="-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;"/>
+            <Label text="Morceaux" style="-fx-text-fill: #b3b3b3; -fx-font-size: 16;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="200" prefHeight="120" style="-fx-background-color: #282828; -fx-background-radius: 10;" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label fx:id="lblAlbums" text="0" style="-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;"/>
+            <Label text="Albums" style="-fx-text-fill: #b3b3b3; -fx-font-size: 16;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="200" prefHeight="120" style="-fx-background-color: #282828; -fx-background-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="lblArtistes" text="0" style="-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;"/>
+            <Label text="Artistes" style="-fx-text-fill: #b3b3b3; -fx-font-size: 16;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="200" prefHeight="120" style="-fx-background-color: #282828; -fx-background-radius: 10;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label fx:id="lblGroupes" text="0" style="-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;"/>
+            <Label text="Groupes" style="-fx-text-fill: #b3b3b3; -fx-font-size: 16;"/>
+        </VBox>
+    </GridPane>
+
+    <HBox alignment="CENTER_LEFT" style="-fx-padding: 20 0 0 0;">
+        <Button text="🔄 Rafraîchir les données" onAction="#chargerStatistiques"
+                style="-fx-background-color: transparent; -fx-border-color: #b3b3b3; -fx-border-radius: 20; -fx-text-fill: white; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>

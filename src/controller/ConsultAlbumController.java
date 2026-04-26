@@ -22,6 +22,7 @@ public class ConsultAlbumController {
     @FXML private VBox trackListContainer;
     private Connection conn;
     private MainController mainController;
+    private List<Morceau> morceaux;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -40,7 +41,7 @@ public class ConsultAlbumController {
     private void loadTracks(Album album) {
         trackListContainer.getChildren().clear();
 
-        List<Morceau> morceaux = album.getMorceauList();
+        morceaux = album.getMorceauList();
 
         int index = 1;
         for (Morceau m : morceaux) {
@@ -86,5 +87,22 @@ public class ConsultAlbumController {
         });
 
         return row;
+    }
+
+    @FXML
+    private void jouerPremierMorceau() {
+        if (morceaux != null && !morceaux.isEmpty()) {
+            Morceau premierMorceau = morceaux.get(0);
+            try {
+                if (mainController != null) {
+                    mainController.lancerMusique(premierMorceau);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.err.println("Erreur lors du lancement de la musique.");
+            }
+        } else {
+            System.out.println("Aucun morceau à jouer !");
+        }
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" style="-fx-background-color: #121212; -fx-padding: 30;"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.AdminUserController">
+
+    <Label text="Gestion des Utilisateurs" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;"/>
+
+    <TabPane VBox.vgrow="ALWAYS" style="-fx-background-color: #181818;" tabClosingPolicy="UNAVAILABLE">
+
+        <Tab text="Abonnés">
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <TableView fx:id="userTable" VBox.vgrow="ALWAYS" style="-fx-base: #282828;">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colPseudo" text="Pseudo" prefWidth="150"/>
+                        <TableColumn fx:id="colPassword" text="Mot de passe" prefWidth="100"/>
+                        <TableColumn fx:id="colActions" text="Mot de passe" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

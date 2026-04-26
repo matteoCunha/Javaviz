@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Abonne extends CompteConnecte {
-    List<Playlist> playlist;
+    private List<Playlist> playlist;
 
     public Abonne(String pseudo, String password, int id) {
         super(pseudo, id, password  );
@@ -25,7 +25,10 @@ public class Abonne extends CompteConnecte {
 
     public String getName() { return this.pseudo; }
 
+
     public void setPlaylist(List<Playlist> list) { this.playlist = list; }
+
+    public List<Playlist> getPlaylists() { return this.playlist; }
     public void printPlay() {
         for(int i = 0; i < this.playlist.size(); i++) {
             this.playlist.get(i).printSequence();

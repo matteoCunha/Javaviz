@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
@@ -21,6 +22,7 @@ import model.repository.PlaylistRepository;
 
 import java.sql.SQLException;
 import java.util.List;
+
 
 public class PlaylistDetailController {
 
@@ -173,6 +175,12 @@ public class PlaylistDetailController {
         btnUp.setVisible(false);
         btnDown.setVisible(false);
 
+        btnUp.setMinWidth(Region.USE_PREF_SIZE);
+        btnDown.setMinWidth(Region.USE_PREF_SIZE);
+        btnDelete.setMinWidth(Region.USE_PREF_SIZE);
+
+        actionsBox.setPrefWidth(100);
+
         actionsBox.getChildren().addAll(btnUp, btnDown, btnDelete);
         row.getChildren().addAll(lblIndex, lblTitre, actionsBox);
 
@@ -199,9 +207,9 @@ public class PlaylistDetailController {
         row.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2 && mainController != null) {
                 try {
-                    mainController.lancerMusique(m);
+                    mainController.lancerMusiquePlaylist(noeud);
                 } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+                    ex.printStackTrace();
                 }
             }
         });
@@ -228,5 +236,23 @@ public class PlaylistDetailController {
         PlaylistRepository playlistRepository = new PlaylistRepository(mainController.conn, morceauRepository);
 
         playlistRepository.updatePlaylist(currentPlaylist);
+    }
+
+    @FXML
+    private void jouerPremierMorceau() {
+        if (currentPlaylist != null &&
+                currentPlaylist.getSequence() != null &&
+                currentPlaylist.getSequence().getHead() != null) {
+            try {
+                if (mainController != null) {
+                    mainController.lancerMusiquePlaylist(currentPlaylist.getSequence().getHead());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.err.println("Erreur lors du lancement de la playlist.");
+            }
+        } else {
+            System.out.println("La playlist est vide !");
+        }
     }
 }

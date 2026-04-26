@@ -23,20 +23,20 @@ public class ArtistViewController {
 
     private Artiste currentArtist;
     private MainController mainController;
+    private List<Morceau> morceaux;
 
     public void setArtistData(Artiste artiste, MainController main) throws SQLException {
         this.currentArtist = artiste;
         this.mainController = main;
 
         artistNameLabel.setText(artiste.getPseudo());
-        // monthlyListenersLabel.setText(artiste.getFollowers() + " abonnés");
 
         MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
-        List<Morceau> topTracks = morceauRepository.fetchTop5ByArtist(artiste);
-        displayTopTracks(topTracks);
+        morceaux = morceauRepository.fetchTop5ByArtist(artiste);
+        displayTopTracks(morceaux);
 
         int n = 0;
-        for (Morceau m : topTracks) { n = n + m.getNb_ecoutes(); }
+        for (Morceau m : morceaux) { n = n + m.getNb_ecoutes(); }
         listenerLabel.setText(n + " écoutes");
         descriptionLabel.setText(artiste.getDescription());
 
@@ -130,6 +130,23 @@ public class ArtistViewController {
             });
 
             albumsContainer.getChildren().add(card);
+        }
+    }
+
+    @FXML
+    private void jouerPremierMorceau() {
+        if (morceaux != null && !morceaux.isEmpty()) {
+            Morceau premierMorceau = morceaux.get(0);
+            try {
+                if (mainController != null) {
+                    mainController.lancerMusique(premierMorceau);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.err.println("Erreur lors du lancement de la musique.");
+            }
+        } else {
+            System.out.println("Aucun morceau à jouer !");
         }
     }
 }

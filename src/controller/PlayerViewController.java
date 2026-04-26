@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Duration;
 import model.music.Morceau;
+import model.music.SequenceDeMusique;
 import model.repository.MorceauRepository;
 import model.user.Abonne;
 
@@ -22,8 +23,11 @@ public class PlayerViewController {
     @FXML private Label currentTimeLabel;
     @FXML private Label totalTimeLabel;
     @FXML private Slider timeSlider;
+    @FXML private Button btnPrev;
+    @FXML private Button btnNext;
 
     private Morceau currentTrack;
+    private SequenceDeMusique.Node  currentPlayingNode = null;
     private boolean isPlaying = false;
     private MainController mainController;
 
@@ -41,9 +45,22 @@ public class PlayerViewController {
         timeLine.setCycleCount(Timeline.INDEFINITE);
 
         timeSlider.setDisable(true);
+        actualiserBoutons();
     }
 
     public void jouerMorceau(Morceau morceau) throws SQLException {
+        this.currentPlayingNode = null;
+        actualiserBoutons();
+        demarrerLecture(morceau);
+    }
+
+    public void jouerDepuisPlaylist(SequenceDeMusique.Node noeud) throws SQLException {
+        this.currentPlayingNode = noeud;
+        actualiserBoutons();
+        demarrerLecture(noeud.getMorceaux());
+    }
+
+    private void demarrerLecture(Morceau morceau) throws SQLException {
         this.currentTrack = morceau;
         this.tempsTotal = morceau.getTime();
         MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
@@ -68,6 +85,33 @@ public class PlayerViewController {
         }
     }
 
+    private void actualiserBoutons() {
+        boolean estPlaylist = (currentPlayingNode != null);
+
+        boolean hasPrev = estPlaylist && currentPlayingNode.getPrev() != null;
+        boolean hasNext = estPlaylist && currentPlayingNode.getNext() != null;
+
+        btnPrev.setDisable(!hasPrev);
+        btnNext.setDisable(!hasNext);
+
+        btnPrev.setOpacity(hasPrev ? 1.0 : 0.3);
+        btnNext.setOpacity(hasNext ? 1.0 : 0.3);
+    }
+
+    @FXML
+    public void jouerPrecedent() throws SQLException {
+        if (currentPlayingNode != null && currentPlayingNode.getPrev() != null) {
+            jouerDepuisPlaylist(currentPlayingNode.getPrev());
+        }
+    }
+
+    @FXML
+    public void jouerSuivant() throws SQLException {
+        if (currentPlayingNode != null && currentPlayingNode.getNext() != null) {
+            jouerDepuisPlaylist(currentPlayingNode.getNext());
+        }
+    }
+
     @FXML
     public void togglePlayPause() {
         if (currentTrack == null) return;
@@ -86,13 +130,19 @@ public class PlayerViewController {
     private void avancerTemps() {
         if (tempEcoule >= tempsTotal) {
             timeLine.stop();
-            isPlaying = false;
-            playPauseBtn.setText("▶");
+
+            if (currentPlayingNode != null && currentPlayingNode.getNext() != null) {
+                try {
+                    jouerSuivant();
+                } catch (SQLException e) { e.printStackTrace(); }
+            } else {
+                isPlaying = false;
+                playPauseBtn.setText("▶");
+            }
             return;
         }
 
         tempEcoule++;
-
         timeSlider.setValue(tempEcoule);
         currentTimeLabel.setText(formaterTemps(tempEcoule));
     }

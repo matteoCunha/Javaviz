@@ -22,6 +22,7 @@ public class SequenceDeMusique {
 
         public Node getNext() { return this.next; }
         public Node getNode() { return this; }
+        public Node getPrev() { return this.prev; }
         public Morceau getMorceaux() { return this.morceau; }
     }
 

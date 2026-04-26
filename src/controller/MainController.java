@@ -26,10 +26,10 @@ public class MainController {
     User utilisateur; // utilisation si besoin utilisation du polymorphisme pour le passer en Abonne, Visiteur ou admin
     //DONE : Recherche et renvoyer les albums/artistes/morceaux etc FAIT
     //DONE : ajouter d'autres morceaux albums et groupes (au moins 5 groupes de plus et 5 albums de plus)
-    //TODO : Pouvoir afficher l'historique d'écoute, a voir si sous forme de playlist, album on un autre view
+    //DONE : Pouvoir afficher l'historique d'écoute, a voir si sous forme de playlist, album on un autre view
     //TODO : Ajouter les deux fonctions supplémentaire a voir quoi encore
-    //TODO : ajouter les nombre d'écoutes pour chaques morceaux pour les stats coté admin
-    //TODO : faire l'interface coté administrateur avec ajout/suppression de morceaux albums etc...
+    //DONE : ajouter les nombre d'écoutes pour chaques morceaux pour les stats coté admin
+    //DONE : faire l'interface coté administrateur avec ajout/suppression de morceaux albums etc...
     //TODO : ajouter un son lors du lancement d'une musique (peut être toujours le même) et un son non copyright
     @FXML private StackPane contentArea;
     @FXML private VBox sideMenu;
@@ -64,6 +64,12 @@ public class MainController {
 
         if (playerViewController != null) {
             playerViewController.jouerMorceau(m);
+        }
+    }
+
+    public void lancerMusiquePlaylist(SequenceDeMusique.Node node) throws SQLException {
+        if (playerViewController != null) {
+            playerViewController.jouerDepuisPlaylist(node);
         }
     }
 
@@ -202,10 +208,52 @@ public class MainController {
 
     public void showAddCreateurView() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/vue/AddCreateurView.fxml"));
-            javafx.scene.layout.VBox view = loader.load();
+            FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/vue/AddCreateurView.fxml"));
+            VBox view = loader.load();
 
-            controller.AddCreateurController controller = loader.getController();
+            AddCreateurController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAdminUsersView() {
+        try {
+            FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/vue/AdminUserView.fxml"));
+            VBox view = loader.load();
+
+            AdminUserController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAdminStatsView() {
+        try {
+            FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/vue/AdminStatsView.fxml"));
+            VBox view = loader.load();
+
+            AdminStatsController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAdvancedStatsView() {
+        try {
+            FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/vue/AdvancedStatsView.fxml"));
+            Node view = loader.load();
+
+            AdvancedStatsController controller = loader.getController();
             controller.setMainController(this);
 
             contentArea.getChildren().setAll(view);
@@ -362,9 +410,8 @@ public class MainController {
 
             visitorLimitLabel.setText("Écoutes restantes : " + ecoute);
             authContainer.setVisible(true);
-            authContainer.setManaged(true);
             userProfileContainer.setVisible(false);
-            userProfileContainer.setManaged(false);
+
 
             if (v.getCompteurEcoute() <= 1) {
                 visitorLimitLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-background-color: #d32f2f; -fx-padding: 5 15; -fx-background-radius: 15;");
@@ -373,9 +420,7 @@ public class MainController {
             visitorLimitContainer.setVisible(false);
             visitorLimitLabel.setVisible(false);
             authContainer.setVisible(false);
-            authContainer.setManaged(false);
             userProfileContainer.setVisible(true);
-            userProfileContainer.setManaged(true);
         }
     }
 
@@ -383,7 +428,6 @@ public class MainController {
         playlistsContainer.getChildren().clear();
 
         if (utilisateur instanceof Visiteur) {
-
             Label info = new Label("S'abonner/Se connecter pour\nvoir vos playlists");
             info.setStyle("-fx-text-fill: #b3b3b3; -fx-padding: 10;");
             playlistsContainer.getChildren().add(info);
@@ -446,13 +490,21 @@ public class MainController {
 
             Button btnUsers = new Button("👥 Gestion Users");
             btnUsers.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-            //btnUsers.setOnAction(e -> showAdminUsersView());
+            btnUsers.setOnAction(e -> showAdminUsersView());
 
             Button btnCatalog = new Button("🎵 Gestion Catalogue");
             btnCatalog.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
             btnCatalog.setOnAction(e -> showAdminCatalog());
 
-            playlistsContainer.getChildren().addAll(titreAdmin, btnUsers, btnCatalog);
+            Button btnStats = new Button("📊 Statistiques");
+            btnStats.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;");
+            btnStats.setOnAction(e -> showAdminStatsView());
+
+            Button btnAdvStats = new Button("🚀 Stats Évoluées");
+            btnAdvStats.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;");
+            btnAdvStats.setOnAction(e -> showAdvancedStatsView());
+
+            playlistsContainer.getChildren().addAll(titreAdmin, btnUsers, btnCatalog, btnStats, btnAdvStats);
             buttonAddPlay.setVisible(false);
             separatorAddPlay.setVisible(false);
         }

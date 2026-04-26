@@ -27,6 +27,7 @@ public class GroupViewController {
 
     private Group currentGroup;
     private MainController mainController;
+    private List<Morceau> morceaux;
 
     public void setArtistData(Group group, MainController main) throws SQLException {
         this.currentGroup = group;
@@ -36,11 +37,11 @@ public class GroupViewController {
         // monthlyListenersLabel.setText(artiste.getFollowers() + " abonnés");
 
         MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
-        List<Morceau> topTracks = morceauRepository.fetchTop5ByGroup(currentGroup);
-        displayTopTracks(topTracks);
+        morceaux = morceauRepository.fetchTop5ByGroup(currentGroup);
+        displayTopTracks(morceaux);
 
         int n = 0;
-        for (Morceau m : topTracks) { n = n + m.getNb_ecoutes(); }
+        for (Morceau m : morceaux) { n = n + m.getNb_ecoutes(); }
         listenerLabel.setText(n + " écoutes");
         descriptionLabel.setText(currentGroup.getDescription());
 
@@ -174,6 +175,23 @@ public class GroupViewController {
             });
 
             membersContainer.getChildren().add(memberCard);
+        }
+    }
+
+    @FXML
+    private void jouerPremierMorceau() {
+        if (morceaux != null && !morceaux.isEmpty()) {
+            Morceau premierMorceau = morceaux.get(0);
+            try {
+                if (mainController != null) {
+                    mainController.lancerMusique(premierMorceau);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.err.println("Erreur lors du lancement de la musique.");
+            }
+        } else {
+            System.out.println("Aucun morceau à jouer !");
         }
     }
 }

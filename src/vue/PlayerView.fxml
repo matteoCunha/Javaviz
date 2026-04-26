@@ -24,16 +24,18 @@
     <center>
         <VBox alignment="CENTER" spacing="5" maxWidth="500">
             <HBox spacing="20" alignment="CENTER">
-                <Button text="⏮" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;"/>
-                <Button fx:id="playPauseBtn" text="▶" onAction="#togglePlayPause"
-                        style="-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 50; -fx-pref-width: 35; -fx-pref-height: 35; -fx-cursor: hand;"/>
-                <Button text="⏭" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;"/>
-            </HBox>
+            <Button fx:id="btnPrev" text="⏮" onAction="#jouerPrecedent" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;"/>
+
+            <Button fx:id="playPauseBtn" text="▶" onAction="#togglePlayPause"
+                    style="-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 50; -fx-pref-width: 35; -fx-pref-height: 35; -fx-cursor: hand;"/>
+
+            <Button fx:id="btnNext" text="⏭" onAction="#jouerSuivant" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;"/>
+        </HBox>
 
             <HBox spacing="10" alignment="CENTER" maxWidth="Infinity">
                 <Label fx:id="currentTimeLabel" text="0:00" style="-fx-text-fill: #b3b3b3; -fx-font-size: 11;"/>
                 <Slider fx:id="timeSlider" HBox.hgrow="ALWAYS" styleClass="player-slider"/>
-                <Label fx:id="totalTimeLabel" text="3:45" style="-fx-text-fill: #b3b3b3; -fx-font-size: 11;"/>
+                <Label fx:id="totalTimeLabel" text="0:00" style="-fx-text-fill: #b3b3b3; -fx-font-size: 11;"/>
             </HBox>
         </VBox>
     </center>

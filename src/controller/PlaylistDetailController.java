@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import model.music.Morceau;
@@ -29,11 +30,12 @@ public class PlaylistDetailController {
     @FXML private Label trackCount;
     @FXML private VBox trackListContainer;
     @FXML private ComboBox<Morceau> trackComboBox;
+    @FXML private Button deleteButton;
 
     private Playlist currentPlaylist;
     private MainController mainController;
 
-    private PauseTransition autoSaveTimer = new PauseTransition(Duration.seconds(2));
+    private PauseTransition autoSaveTimer = new PauseTransition(Duration.seconds(1));
 
     public void initialize() {
         autoSaveTimer.setOnFinished(event -> {
@@ -51,9 +53,19 @@ public class PlaylistDetailController {
 
         playlistTitle.setText(playlist.getName());
         statusLabel.setText(playlist.isPublic() ? "PLAYLIST PUBLIQUE" : "PLAYLIST PRIVÉE");
+        creatorName.setText("Créé par " + playlist.getCreateur().getName());
 
         loadTracks();
         chargerCatalogue();
+    }
+
+    public void handleDeletePlaylist() throws SQLException {
+        MorceauRepository m = new MorceauRepository(mainController.conn);
+        PlaylistRepository repository = new PlaylistRepository(mainController.conn, m);
+
+        repository.deletePlaylist(currentPlaylist);
+        mainController.updateSideMenu();
+        mainController.showHome();
     }
 
     public void chargerCatalogue() throws SQLException {
@@ -132,7 +144,7 @@ public class PlaylistDetailController {
         lblIndex.setPrefWidth(30);
         lblIndex.setStyle("-fx-text-fill: #b3b3b3;");
 
-        Label lblTitre = new Label(m.getTitre());
+        Label lblTitre = new Label(m.getTitre() + " - " + m.getAutorName());
         lblTitre.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
         HBox.setHgrow(lblTitre, Priority.ALWAYS);
 
@@ -145,10 +157,23 @@ public class PlaylistDetailController {
         btnUp.setStyle("-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;");
         btnDown.setStyle("-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;");
 
+        Button btnDelete = new Button();
+        btnDelete.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+        SVGPath trashIcon = new SVGPath();
+        trashIcon.setContent("M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z");
+        trashIcon.setFill(javafx.scene.paint.Color.web("#b3b3b3"));
+
+        btnDelete.setGraphic(trashIcon);
+        btnDelete.setVisible(false);
+
+        btnDelete.setOnMouseEntered(e -> trashIcon.setFill(javafx.scene.paint.Color.web("#d32f2f")));
+        btnDelete.setOnMouseExited(e -> trashIcon.setFill(javafx.scene.paint.Color.web("#b3b3b3")));
+
         btnUp.setVisible(false);
         btnDown.setVisible(false);
 
-        actionsBox.getChildren().addAll(btnUp, btnDown);
+        actionsBox.getChildren().addAll(btnUp, btnDown, btnDelete);
         row.getChildren().addAll(lblIndex, lblTitre, actionsBox);
 
         btnUp.setOnAction(event -> {
@@ -162,6 +187,12 @@ public class PlaylistDetailController {
             currentPlaylist.getSequence().moveDown(noeud);
             loadTracks();
 
+            autoSaveTimer.playFromStart();
+        });
+
+        btnDelete.setOnAction(event -> {
+            currentPlaylist.getSequence().remove(noeud);
+            loadTracks();
             autoSaveTimer.playFromStart();
         });
 
@@ -179,11 +210,14 @@ public class PlaylistDetailController {
             row.setStyle("-fx-background-color: #2a2a2a; -fx-background-radius: 5;");
             btnUp.setVisible(true);
             btnDown.setVisible(true);
+            btnDelete.setVisible(true);
         });
+
         row.setOnMouseExited(e -> {
             row.setStyle("-fx-background-color: transparent;");
             btnUp.setVisible(false);
             btnDown.setVisible(false);
+            btnDelete.setVisible(false);
         });
 
         return row;

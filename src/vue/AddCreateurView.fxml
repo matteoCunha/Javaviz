@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" style="-fx-background-color: #121212; -fx-padding: 40;"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.AddCreateurController">
+
+    <Label text="Ajouter un Artiste ou un Groupe" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;"/>
+
+    <Label fx:id="errorLabel" text="" style="-fx-text-fill: #d32f2f;" managed="false" visible="false"/>
+
+    <GridPane hgap="15" vgap="20" style="-fx-background-color: #181818; -fx-padding: 25; -fx-background-radius: 10;">
+
+        <Label text="Type :" style="-fx-text-fill: #b3b3b3;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <HBox spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="1">
+            <RadioButton fx:id="radioArtiste" text="Artiste" selected="true" style="-fx-text-fill: white;"/>
+            <RadioButton fx:id="radioGroupe" text="Groupe" style="-fx-text-fill: white;"/>
+        </HBox>
+
+        <Label fx:id="nomLabel" text="Pseudo :" style="-fx-text-fill: #b3b3b3;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" prefWidth="300" style="-fx-background-color: #282828; -fx-text-fill: white;" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label fx:id="dateLabel" text="Date de naissance :" style="-fx-text-fill: #b3b3b3;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="datePicker" style="-fx-base: #282828;" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Description :" style="-fx-text-fill: #b3b3b3;" GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="TOP_LEFT"/>
+        <TextArea fx:id="descriptionArea" prefHeight="80" style="-fx-control-inner-background: #282828; -fx-text-fill: white;" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label fx:id="groupeLabel" text="Appartient au groupe :" style="-fx-text-fill: #b3b3b3;" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="groupeComboBox" promptText="Aucun (Artiste Solo)" prefWidth="300" style="-fx-background-color: #282828;" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="Annuler" onAction="#handleCancel" style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;"/>
+        <Button text="ENREGISTRER" onAction="#handleSave" style="-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 10 25; -fx-cursor: hand;"/>
+    </HBox>
+</VBox>

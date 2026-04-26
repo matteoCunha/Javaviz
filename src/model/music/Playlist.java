@@ -25,4 +25,8 @@ public class Playlist {
     public Boolean isPublic() { return this.isPublic; }
 
     public void setId(int n) { this.id = n; }
+
+    public Abonne getCreateur() {
+        return createur;
+    }
 }

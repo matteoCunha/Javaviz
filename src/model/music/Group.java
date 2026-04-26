@@ -50,6 +50,13 @@ public class Group implements Consultable, Recherchable {
 
     @Override
     public String getContent() {return getSearchTitle() + " - " + getSearchSubtitle(); }
+
+    @Override
+    public String toString() { return getHeaderTitle(); }
+
+    public LocalDate getDateCreation() { return this.dateCreation; }
+
+    public void setId(int nouvelId) { this.id = nouvelId; }
 }
 /*
 champ de group :

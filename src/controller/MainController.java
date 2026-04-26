@@ -3,10 +3,7 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -22,6 +19,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class MainController {
     Connection conn;
@@ -42,7 +40,10 @@ public class MainController {
     @FXML private TextField searchField;
     @FXML private VBox playlistsContainer;
     @FXML private Button buttonAddPlay;
+    @FXML private Button btnHistorique;
     @FXML private Separator separatorAddPlay;
+    @FXML private HBox visitorLimitContainer;
+    @FXML private Label visitorLimitLabel;
 
     public MainController() throws SQLException {
         this.conn = DatabaseConnection.getConnection();
@@ -50,8 +51,35 @@ public class MainController {
     }
 
     public void lancerMusique(Morceau m) throws SQLException {
+        if (utilisateur instanceof Visiteur v) {
+            if (!v.peutEcouter()) {
+                System.out.println("BLOCAGE : Il ne reste plus aucune écoute pour cette session");
+                afficherPopUpVisiteur();
+                return;
+            }
+
+            v.incrementerEcoute();
+            updateTopBar();
+        }
+
         if (playerViewController != null) {
             playerViewController.jouerMorceau(m);
+        }
+    }
+
+    public void afficherPopUpVisiteur() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Limite d'écoutes atteinte");
+        alert.setHeaderText("Vous avez épuisé vos 5 écoutes gratuites !");
+        alert.setContentText("Passez à la vitesse supérieure. Créez un compte pour écouter vos musiques en illimité et créer vos propres playlists.");
+
+        ButtonType boutonInscription = new ButtonType("S'inscrire maintenant", ButtonBar.ButtonData.OK_DONE);
+        ButtonType boutonAnnuler = new ButtonType("Plus tard", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(boutonInscription, boutonAnnuler);
+        Optional<ButtonType> resultat = alert.showAndWait();
+        if (resultat.isPresent() && resultat.get() == boutonInscription) {
+            showSignUp();
         }
     }
 
@@ -82,6 +110,11 @@ public class MainController {
 
     @FXML
     public void initialize() throws SQLException {
+        visitorLimitContainer.managedProperty().bind(visitorLimitContainer.visibleProperty());
+        authContainer.managedProperty().bind(authContainer.visibleProperty());
+        userProfileContainer.managedProperty().bind(userProfileContainer.visibleProperty());
+        btnHistorique.managedProperty().bind(btnHistorique.visibleProperty());
+
         if (playerViewController != null) {
             playerViewController.setMainController(this);
         }
@@ -95,8 +128,8 @@ public class MainController {
                 }
             }
         });
-        showHome();
         updateSideMenu();
+        showLogin();
     }
 
     @FXML
@@ -107,6 +140,78 @@ public class MainController {
     @FXML
     public void showLogin() {
         loadView("LoginView.fxml");
+    }
+
+    public void showHistorique() {
+        if (utilisateur instanceof Abonne) {
+            try {
+                MorceauRepository m = new MorceauRepository(this.conn);
+                PlaylistRepository playlistRepository = new PlaylistRepository(this.conn, m);
+                Playlist historique = playlistRepository.getHistorique((Abonne) utilisateur);
+                showPlaylistDetail(historique);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void showAdminCatalog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/AdminCatalogView.fxml"));
+            Node view = loader.load();
+
+            AdminCatalogController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : sign up");
+            e.printStackTrace();
+        }
+    }
+
+    public void showAdminAddMorceau() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/AddMorceauView.fxml"));
+            Node view = loader.load();
+
+            AddMorceauController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : sign up");
+            e.printStackTrace();
+        }
+    }
+
+    public void showAddAlbumView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/AddAlbumView.fxml"));
+            Node view = loader.load();
+
+            AddAlbumController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : sign up");
+            e.printStackTrace();
+        }
+    }
+
+    public void showAddCreateurView() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/vue/AddCreateurView.fxml"));
+            javafx.scene.layout.VBox view = loader.load();
+
+            controller.AddCreateurController controller = loader.getController();
+            controller.setMainController(this);
+
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -173,27 +278,6 @@ public class MainController {
         }
     }
 
-    @FXML
-    public void logout() throws SQLException {
-        updateSessionState(null);
-        showHome();
-    }
-
-    public void consultAlbum(Album album) throws SQLException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/ConsultAlbumView.fxml"));
-            Node view = loader.load();
-
-            ConsultAlbumController controller = loader.getController();
-            controller.setMainController(this);
-            controller.setAlbumData(album, this.conn);
-            contentArea.getChildren().setAll(view);
-        } catch (IOException e) {
-            System.err.println("Erreur lors du chargement de la vue : consult album");
-            e.printStackTrace();
-        }
-    }
-
     public void showSearchView(SearchResult results, String query) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/SearchView.fxml"));
@@ -225,6 +309,27 @@ public class MainController {
         }
     }
 
+    @FXML
+    public void logout() throws SQLException {
+        updateSessionState(null);
+        showHome();
+    }
+
+    public void consultAlbum(Album album) throws SQLException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/ConsultAlbumView.fxml"));
+            Node view = loader.load();
+
+            ConsultAlbumController controller = loader.getController();
+            controller.setMainController(this);
+            controller.setAlbumData(album, this.conn);
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de la vue : consult album");
+            e.printStackTrace();
+        }
+    }
+
     public void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/" + fxmlFile));
@@ -247,6 +352,33 @@ public class MainController {
         }
     }
 
+    public void updateTopBar() {
+        if (utilisateur instanceof Visiteur v) {
+
+            visitorLimitContainer.setVisible(true);
+            visitorLimitLabel.setVisible(true);
+
+            int ecoute = 5 - v.getCompteurEcoute();
+
+            visitorLimitLabel.setText("Écoutes restantes : " + ecoute);
+            authContainer.setVisible(true);
+            authContainer.setManaged(true);
+            userProfileContainer.setVisible(false);
+            userProfileContainer.setManaged(false);
+
+            if (v.getCompteurEcoute() <= 1) {
+                visitorLimitLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-background-color: #d32f2f; -fx-padding: 5 15; -fx-background-radius: 15;");
+            }
+        } else {
+            visitorLimitContainer.setVisible(false);
+            visitorLimitLabel.setVisible(false);
+            authContainer.setVisible(false);
+            authContainer.setManaged(false);
+            userProfileContainer.setVisible(true);
+            userProfileContainer.setManaged(true);
+        }
+    }
+
     public void updateSideMenu() throws SQLException{
         playlistsContainer.getChildren().clear();
 
@@ -257,6 +389,9 @@ public class MainController {
             playlistsContainer.getChildren().add(info);
             buttonAddPlay.setVisible(false);
             separatorAddPlay.setVisible(false);
+            if (btnHistorique != null) {
+                btnHistorique.setVisible(false);
+            }
         } else if (utilisateur instanceof Abonne){
 
             Label titre = new Label("VOS PLAYLISTS");
@@ -264,6 +399,10 @@ public class MainController {
             playlistsContainer.getChildren().add(titre);
             buttonAddPlay.setVisible(true);
             separatorAddPlay.setVisible(true);
+
+            if (btnHistorique != null) {
+                btnHistorique.setVisible(true);
+            }
 
             MorceauRepository m = new MorceauRepository(conn);
             PlaylistRepository p = new PlaylistRepository(conn, m);
@@ -301,6 +440,21 @@ public class MainController {
                 });
                 playlistsContainer.getChildren().add(playlistBtn);
             }
+        } else if (utilisateur instanceof Admin) {
+            Label titreAdmin = new Label("ADMINISTRATION");
+            titreAdmin.setStyle("-fx-text-fill: #d32f2f; -fx-font-weight: bold; -fx-padding: 10 0 5 0;");
+
+            Button btnUsers = new Button("👥 Gestion Users");
+            btnUsers.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+            //btnUsers.setOnAction(e -> showAdminUsersView());
+
+            Button btnCatalog = new Button("🎵 Gestion Catalogue");
+            btnCatalog.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+            btnCatalog.setOnAction(e -> showAdminCatalog());
+
+            playlistsContainer.getChildren().addAll(titreAdmin, btnUsers, btnCatalog);
+            buttonAddPlay.setVisible(false);
+            separatorAddPlay.setVisible(false);
         }
     }
 

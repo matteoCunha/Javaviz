@@ -26,6 +26,12 @@ public class LoginViewController {
 
     }
 
+    @FXML
+    public void showSignUp() { mainController.showSignUp(); }
+
+    @FXML
+    public void showHome() { mainController.showHome(); }
+
     public void setMainController(MainController c) { this.mainController = c; }
 
     public void handleLogin() throws SQLException {
@@ -34,6 +40,7 @@ public class LoginViewController {
 
         if (pseudoIn.isEmpty() || passwordIn.isEmpty()) {
             sendError("Veuillez remplir tous les champs");
+            return;
         }
 
         System.out.println("Tentative de connexion avec : user = " + pseudoIn + " | password = " + passwordIn);

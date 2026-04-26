@@ -2,6 +2,7 @@ package model.music;
 
 import model.interfaces.Consultable;
 import model.interfaces.Recherchable;
+import model.repository.ArtistRepository;
 import model.repository.MorceauRepository;
 
 import java.sql.Date;
@@ -51,6 +52,8 @@ public class Album implements Consultable, Recherchable {
     public LocalDate getDateCreation() { return this.dateCreation; }
     public java.sql.Date getSqlDate() { return Date.valueOf(this.dateCreation); }
     public List<Morceau> getMorceauList() { return this.morceauList; }
+    public Artiste getArtiste() { return this.artiste; }
+    public Group getGroup() { return this.group; }
 
 
     // ------------ Partie interface Consultable -------------------

@@ -2,10 +2,7 @@ package model.repository;
 
 import model.music.Group;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +67,73 @@ public class GroupRepository {
         p.setInt(4, g.getId());
 
         int rs = p.executeUpdate();
+    }
+
+    public void deleteGroupe(Group groupe) throws SQLException {
+        boolean autoCommitPrecedent = this.conn.getAutoCommit();
+        this.conn.setAutoCommit(false);
+        try {
+            String updateMorceaux = "UPDATE morceau SET group_id = NULL WHERE group_id = ?";
+            try (PreparedStatement p1 = this.conn.prepareStatement(updateMorceaux)) {
+                p1.setLong(1, groupe.getId());
+                p1.executeUpdate();
+            }
+
+            String updateAlbums = "UPDATE album SET group_id = NULL WHERE group_id = ?";
+            try (PreparedStatement p2 = this.conn.prepareStatement(updateAlbums)) {
+                p2.setLong(1, groupe.getId());
+                p2.executeUpdate();
+            }
+
+            String deleteGroupe = "DELETE FROM groupe WHERE id = ?";
+            try (PreparedStatement p3 = this.conn.prepareStatement(deleteGroupe)) {
+                p3.setLong(1, groupe.getId());
+                p3.executeUpdate();
+            }
+
+            this.conn.commit();
+            System.out.println("Groupe '" + groupe.getName() + "' supprimé avec succès !");
+
+        } catch (SQLException e) {
+            this.conn.rollback();
+            System.err.println("Erreur lors de la suppression du groupe. Annulation des modifications.");
+            throw e;
+        } finally {
+            this.conn.setAutoCommit(autoCommitPrecedent);
+        }
+    }
+
+    public void insertGroup(Group groupe) throws SQLException {
+        String sql = "INSERT INTO groupe (name, description, date_creation) VALUES (?, ?, ?)";
+        try (PreparedStatement p = this.conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            p.setString(1, groupe.getName());
+            if (groupe.getDescription() != null && !groupe.getDescription().isEmpty()) {
+                p.setString(2, groupe.getDescription());
+            } else {
+                p.setNull(2, Types.VARCHAR);
+            }
+            p.setDate(3, java.sql.Date.valueOf(groupe.getDateCreation()));
+            p.executeUpdate();
+
+            try (ResultSet rs = p.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int nouvelId = rs.getInt(1);
+                    groupe.setId(nouvelId);
+                    System.out.println("Groupe créé avec succès avec l'ID : " + nouvelId);
+                }
+            }
+        }
+    }
+
+    public List<Group> fetchAll() throws SQLException {
+        String sql = "SELECT * FROM groupe";
+        PreparedStatement p = this.conn.prepareStatement(sql);
+
+        ResultSet rs = p.executeQuery();
+        List<Group> list = new ArrayList<>();
+        while(rs.next()) { list.add(createGroupFromsql(rs)); }
+
+        return list;
     }
 }
 

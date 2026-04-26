@@ -15,7 +15,7 @@ public class Morceau implements Recherchable {
     private int nb_ecoutes;
     private int numero_piste;
     private String titre;
-    private int position; // peut être null -> sert uniquement pour les playlists
+    private int position;
 
     public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int n) {
         this.id = id;
@@ -63,19 +63,34 @@ public class Morceau implements Recherchable {
         this.nb_ecoutes = n;
     }
 
-    public void ajouterEcoute() { this.nb_ecoutes++; }
+    public void setId(int id) { this.id = id; }
     public String getTitre() { return this.titre; }
+    public String getGenre() { return this.genre; }
+    public int getTemps() { return this.temps; }
     public int getId() { return this.id; }
     public int getNumeroPiste()  { return this.numero_piste;}
     public void setNumeroPiste(int n)  { this.numero_piste = n; }
+
+    public LocalDate getDateSortie() { return this.dateSortie; }
 
     public int getPosition() { return this.position; }
     public void setPosition(int n) { this.position = n;}
 
     public int getNb_ecoutes() { return nb_ecoutes; }
-    public void setNb_ecoutes(int n) { this.nb_ecoutes = n; }
+
+    @Override
+    public String toString() {
+        return this.titre;
+    }
 
     public int getTime() { return this.temps; }
+    public int getAutorId() {
+        if (this.artiste != null) {
+            return this.artiste.getId();
+        }
+
+        return 0;
+    }
 
     public String getAutorName() {
         if (this.artiste != null) {
@@ -95,6 +110,14 @@ public class Morceau implements Recherchable {
 
     @Override
     public String getContent() {return getSearchTitle() + " - " + getSearchSubtitle(); }
+
+    public int getGroupId() {
+        if (this.group != null) {
+            return this.group.getId();
+        }
+
+        return 0;
+    }
 }
 
 

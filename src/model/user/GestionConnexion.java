@@ -17,7 +17,7 @@ public class GestionConnexion {
 
     public CompteConnecte connexion(String pseudo, String password) throws SQLException {
         CompteConnecte user = userRepository.fetchByPseudo(pseudo);
-        if (user != null && !user.comparePass(password)) {
+        if (user != null && user.comparePass(password)) {
             return user;
         }
         return null;

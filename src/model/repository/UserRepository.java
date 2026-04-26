@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
     Connection conn;
@@ -21,6 +23,7 @@ public class UserRepository {
         boolean isAdmin = rs.getBoolean("isadmin");
 
         if (isAdmin) {
+            System.out.println("admin trouvé");
             return new Admin(pseudo, password, id);
         }
 
@@ -70,6 +73,18 @@ public class UserRepository {
             }
         }
         return false;
+    }
+
+    public List<Abonne> fetchAllAbonne() throws SQLException {
+        String sql = "SELECT * FROM users WHERE isadmin = FALSE";
+        PreparedStatement p = this.conn.prepareStatement(sql);
+
+        List<Abonne> list = new ArrayList<>();
+        ResultSet rs = p.executeQuery();
+        while(rs.next()) {
+            list.add((Abonne) createAbonneFromsql(rs));
+        }
+        return list;
     }
 }
 

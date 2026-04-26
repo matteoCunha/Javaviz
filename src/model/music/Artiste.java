@@ -20,6 +20,7 @@ public class Artiste implements Consultable, Recherchable {
 
     public String getPseudo() { return this.pseudo; }
     public int getId() { return this.id; }
+    public LocalDate getDateNaissance() { return this.dateNaissance; }
 
     // ------------ Partie interface Consultable -------------------
     @Override
@@ -44,6 +45,11 @@ public class Artiste implements Consultable, Recherchable {
 
     @Override
     public String getContent() { return getSearchTitle() + " - " + getSearchSubtitle(); }
+
+    @Override
+    public String toString() {
+        return this.pseudo; // ou peu importe comment s'appelle ta variable "nom"
+    }
 
 }
 

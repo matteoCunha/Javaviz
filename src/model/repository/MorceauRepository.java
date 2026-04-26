@@ -4,10 +4,8 @@ import model.music.Group;
 import model.music.Morceau;
 import model.user.Abonne;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
+import java.sql.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -123,6 +121,17 @@ public class MorceauRepository {
         return list;
     }
 
+    public List<Morceau> fetchOrphelins() throws SQLException {
+        String query = "SELECT * FROM morceau WHERE album_id = NULL";
+        PreparedStatement p = this.conn.prepareStatement(query);
+
+        ResultSet rs = p.executeQuery();
+        List<Morceau> list = new ArrayList<>();
+        while(rs.next()) { list.add(createMorceauFromsql(rs)); }
+
+        return list;
+    }
+
     public List<Morceau> fetchHomeMorceaux() throws SQLException {
         String query = "SELECT * FROM morceau ORDER BY nb_ecoutes DESC LIMIT ?";
         PreparedStatement p = conn.prepareStatement(query);
@@ -179,11 +188,67 @@ public class MorceauRepository {
 
         int r = p.executeUpdate();
     }
-}
 
-/*
-TODO : implémenter une fonction recherche puis mettre en forme dans recherchable pour donner 2 morceaux 2 album et 2 artistes par exemple (les 2 sont arbitraires)
-*/
-//fonction updateMorceau fonctionne
-//TODO: a implémenter -> logique d'update de la base de donnée a la fermeture de l'appli pour enregistrer les possibles modifs
-//TODO: faire les fonctions update pour tous les autres éléments de la DB
+    public void deleteMorceau(Morceau morceau) throws SQLException {
+        boolean autoCommitPrecedent = this.conn.getAutoCommit();
+        this.conn.setAutoCommit(false);
+
+        try {
+            String delHistorique = "DELETE FROM historique_ecoutes WHERE morceau_id = ?";
+            try (PreparedStatement pHist = this.conn.prepareStatement(delHistorique)) {
+                pHist.setInt(1, morceau.getId());
+                pHist.executeUpdate();
+            }
+
+            String delPlaylistMorceaux = "DELETE FROM playlist_morceaux WHERE morceaux_id = ?";
+            try (PreparedStatement p = this.conn.prepareStatement(delPlaylistMorceaux)) {
+                p.setInt(1, morceau.getId());
+                p.executeUpdate();
+            }
+
+            String delMorceau = "DELETE FROM morceau WHERE id = ?";
+            try (PreparedStatement pDel = this.conn.prepareStatement(delMorceau)) {
+                pDel.setInt(1, morceau.getId());
+                pDel.executeUpdate();
+            }
+
+            this.conn.commit();
+        } catch (SQLException e) {
+            this.conn.rollback();
+            throw e;
+        } finally {
+            this.conn.setAutoCommit(autoCommitPrecedent);
+        }
+    }
+
+    public void insertMorceau(Morceau morceau) throws SQLException {
+        String sql = "INSERT INTO morceau (date_sortie, temps, genre, album_id, artiste_id, nb_ecoutes, numero_piste, titre, group_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement p = this.conn.prepareStatement(sql)) {
+
+            p.setDate(1, Date.valueOf(morceau.getDateSortie()));
+            p.setInt(2, morceau.getTemps());
+            p.setString(3, morceau.getGenre());
+            p.setNull(4, java.sql.Types.INTEGER);
+            p.setInt(5, morceau.getAutorId());
+            p.setInt(6, morceau.getNb_ecoutes());
+            p.setInt(7, morceau.getNumeroPiste());
+            p.setString(8, morceau.getTitre());
+
+            if (morceau.getGroupId() == 0) {
+                p.setNull(9, java.sql.Types.INTEGER);
+            } else {
+                p.setInt(9, morceau.getGroupId());
+            }
+
+            p.executeUpdate();
+
+            try (ResultSet generatedKeys = p.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int nouvelId = generatedKeys.getInt(1);
+                    morceau.setId(nouvelId);
+                }
+            }
+        }
+    }
+}

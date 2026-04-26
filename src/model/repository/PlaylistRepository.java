@@ -53,6 +53,33 @@ public class PlaylistRepository {
         return list;
     }
 
+    public void deletePlaylist(Playlist playlist) throws SQLException {
+        boolean autoCommitPrecedent = this.conn.getAutoCommit();
+        this.conn.setAutoCommit(false);
+
+        try {
+            String delMorceaux = "DELETE FROM playlist_morceaux WHERE playlist_id = ?";
+            try (PreparedStatement pDel1 = this.conn.prepareStatement(delMorceaux)) {
+                pDel1.setLong(1, playlist.getId());
+                pDel1.executeUpdate();
+            }
+
+            String delPlaylist = "DELETE FROM playlist WHERE id = ?";
+            try (PreparedStatement pDel2 = this.conn.prepareStatement(delPlaylist)) {
+                pDel2.setLong(1, playlist.getId());
+                pDel2.executeUpdate();
+            }
+
+            this.conn.commit();
+
+        } catch (SQLException e) {
+            this.conn.rollback();
+            throw e;
+        } finally {
+            this.conn.setAutoCommit(autoCommitPrecedent);
+        }
+    }
+
     public void updatePlaylist(Playlist playlist) throws SQLException {
         SequenceDeMusique seq = playlist.getSequence();
         SequenceDeMusique.Node current = seq.getHead();
@@ -126,5 +153,27 @@ public class PlaylistRepository {
             p.executeUpdate();
         }
     }
+
+    public Playlist getHistorique(Abonne abonne) throws SQLException {
+        String sql = "SELECT m.* FROM morceau m " +
+                "JOIN historique_ecoutes h ON m.id = h.morceau_id " +
+                "WHERE h.user_id = ? " +
+                "ORDER BY h.date_ecoute DESC LIMIT 50";
+
+        SequenceDeMusique sequenceHistorique = new SequenceDeMusique();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setLong(1, abonne.getId());
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                MorceauRepository m = new MorceauRepository(conn);
+                Morceau morceau = m.createMorceauFromsql(rs);
+                sequenceHistorique.pushBack(morceau);
+            }
+        }
+
+        Playlist playlistHistorique = new Playlist(-1, "Historique d'écoutes", false, abonne, sequenceHistorique);
+        return playlistHistorique;
+    }
 }
-//TODO : fonction update le jeu est nul

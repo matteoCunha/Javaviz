@@ -11,7 +11,7 @@ public class Abonne extends CompteConnecte {
     List<Playlist> playlist;
 
     public Abonne(String pseudo, String password, int id) {
-        super(pseudo, id, pseudo);
+        super(pseudo, id, password  );
     }
 
     @Override

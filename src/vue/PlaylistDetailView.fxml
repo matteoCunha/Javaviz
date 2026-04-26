@@ -5,6 +5,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.scene.shape.SVGPath?>
 <ScrollPane fx:controller="controller.PlaylistDetailController"
             fitToWidth="true" hbarPolicy="NEVER"
             style="-fx-background-color: transparent; -fx-background: transparent;"
@@ -35,6 +36,14 @@
                                    -fx-font-size: 24; -fx-background-radius: 50;
                                    -fx-pref-width: 60; -fx-pref-height: 60; -fx-cursor: hand;"/>
         </HBox>
+
+        <Button fx:id="deleteButton" onAction="#handleDeletePlaylist"
+                style="-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 5;">
+            <graphic>
+                <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                         fill="#d32f2f" />
+            </graphic>
+        </Button>
 
         <VBox spacing="5">
             <HBox spacing="10" style="-fx-padding: 0 10 10 10; -fx-border-color: #282828; -fx-border-width: 0 0 1 0;">

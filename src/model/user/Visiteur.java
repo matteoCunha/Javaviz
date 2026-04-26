@@ -10,4 +10,7 @@ public class Visiteur extends User{
 
     public void incrementerEcoute() { this.compteurEcoute++; }
     public int getCompteurEcoute() { return compteurEcoute; }
+    public boolean peutEcouter() {
+        return this.compteurEcoute < 5;
+    }
 }

@@ -56,7 +56,6 @@ public class LoginViewController {
             mainController.updateTopBar();
             mainController.showHome();
         }
-
     }
 
     private void sendError(String str) {

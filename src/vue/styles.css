@@ -67,3 +67,19 @@
 .bar-chart .chart-legend-item {
     -fx-text-fill: white;
 }
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #2a2a2a;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #4a4a4a;
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-background-color: #2a2a2a;
+    -fx-border-color: #4a4a4a;
+    -fx-border-radius: 5;
+}

@@ -3,11 +3,11 @@ package model.music;
 import model.user.Abonne;
 
 public class Playlist {
-    int id;
-    String name;
-    boolean isPublic;
-    Abonne createur;
-    SequenceDeMusique sequence;
+    private int id;
+    private String name;
+    private boolean isPublic;
+    private Abonne createur;
+    private SequenceDeMusique sequence;
 
     public Playlist(int id, String name, boolean isPublic, Abonne a, SequenceDeMusique h)  {
         this.id = id;

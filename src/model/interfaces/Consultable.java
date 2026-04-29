@@ -6,5 +6,5 @@ public interface Consultable {
     public String getHeaderTitle();
     public String getSubtitle();
     public String getDescription();
-    public SequenceDeMusique getElements();
+    public SequenceDeMusique getElements();// a supprimer
 }

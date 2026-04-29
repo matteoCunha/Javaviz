@@ -40,19 +40,6 @@ public class SequenceDeMusique {
         this.size = 1;
     }
 
-    public void pushFront(Morceau m) {
-        Node newNode = new Node(m);
-        if(this.head == null || this.tail == null) { //head ==null so tail also
-            this.head = newNode;
-            this.tail = this.head;
-        } else {
-            newNode.next = head;
-            this.head.prev = newNode;
-            this.head = newNode;
-        }
-        this.size++;
-    }
-
     public void moveUp(Node n) {// bouger le morceau plus haut dans la playlist (vers le head)
         if (n == null || n == this.head) { return ; }
 
@@ -77,7 +64,7 @@ public class SequenceDeMusique {
 
     public void pushBack(Morceau m) {
         Node newNode = new Node(m);
-        if (this.head == null || this.tail == null) { //empty list so = pushfront
+        if (this.head == null || this.tail == null) { //empty list donc = pushfront
             this.head = newNode;
             this.tail = this.head;
         } else {
@@ -125,16 +112,15 @@ public class SequenceDeMusique {
 
     public void printPlaylist() {
         Node current = head;
-        System.out.println("\nSequence de Musiques :");
         int i = 1;
         while(current != null) {
-            System.out.print(i + " - " + current.morceau.getPosition() + " - "); i++;
+            System.out.print(i + " - "); i++;
             System.out.println(current.morceau.getContent());
             current = current.next;
         }
     }
 
     public Node passToNext(Node current) { return current.next; }
+
     public Morceau getMorceau(Node current) { return current.morceau; }
 }
-//TODO : fonction lecture (viendras avec l'interface graphique)

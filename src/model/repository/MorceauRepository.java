@@ -4,13 +4,11 @@ import model.music.Group;
 import model.music.Morceau;
 import model.user.Abonne;
 
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import java.sql.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class MorceauRepository {
     protected Connection conn;
@@ -25,13 +23,13 @@ public class MorceauRepository {
         if(!rs.wasNull()) {
             ArtistRepository art = new ArtistRepository(conn);
             Artiste artiste = art.fetchById(artisteId);
-            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getInt("nb_ecoutes"));
+            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getLong("nb_ecoutes"));
         }
 
         int groupId = rs.getInt("group_id");
         GroupRepository groupRepository = new GroupRepository(conn);
         Group group = groupRepository.fetchById(groupId);
-        return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getInt("nb_ecoutes"));
+        return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getLong("nb_ecoutes"));
     }
 
     public Morceau createFromSQLPlaylist(ResultSet rs) throws SQLException {
@@ -44,9 +42,9 @@ public class MorceauRepository {
             Artiste artiste = art.fetchById(artisteId);
             int position = rs.getInt("position");
             if (!rs.wasNull()) {
-                return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), position);
+                return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), position, rs.getLong("nb_ecoutes"));
             }
-            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), 0);
+            return new Morceau(id, dateSortie, artiste, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), rs.getLong("nb_ecoutes"));
         }
 
         int groupId = rs.getInt("group_id");
@@ -57,7 +55,6 @@ public class MorceauRepository {
             return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), position);
         }
         return new Morceau(id, dateSortie, group, rs.getInt("temps"), rs.getString("titre"), rs.getString("genre"), rs.getInt("numero_piste"), 0);
-
     }
 
     public Morceau fetchByArtist(Artiste a) throws SQLException{
@@ -111,7 +108,7 @@ public class MorceauRepository {
     }
 
     public List<Morceau> fetchAllMorceaux() throws SQLException {
-        String query = "SELECT * FROM morceau";
+        String query = "SELECT * FROM morceau ORDER BY id";
         PreparedStatement p = this.conn.prepareStatement(query);
 
         ResultSet rs = p.executeQuery();
@@ -173,7 +170,7 @@ public class MorceauRepository {
     public void updateMorceau(Morceau m) throws SQLException {
         String query = "UPDATE morceau SET nb_ecoutes = ?, numero_piste = ? WHERE id = ? ";
         PreparedStatement p = conn.prepareStatement(query);
-        p.setInt(1, m.getNb_ecoutes());
+        p.setLong(1, m.getNb_ecoutes());
         p.setInt(2, m.getNumeroPiste());
         p.setInt(3, m.getId());
 
@@ -231,7 +228,7 @@ public class MorceauRepository {
             p.setString(3, morceau.getGenre());
             p.setNull(4, java.sql.Types.INTEGER);
             p.setInt(5, morceau.getAutorId());
-            p.setInt(6, morceau.getNb_ecoutes());
+            p.setLong(6, morceau.getNb_ecoutes());
             p.setInt(7, morceau.getNumeroPiste());
             p.setString(8, morceau.getTitre());
 
@@ -250,5 +247,80 @@ public class MorceauRepository {
                 }
             }
         }
+    }
+
+    public List<String> getDistinctGenres() throws SQLException {
+        List<String> genres = new ArrayList<>();
+        String sql = "SELECT DISTINCT genre FROM morceau WHERE genre IS NOT NULL ORDER BY genre";
+        try (PreparedStatement p = this.conn.prepareStatement(sql);
+             ResultSet rs = p.executeQuery()) {
+            while (rs.next()) {
+                genres.add(rs.getString("genre"));
+            }
+        }
+        return genres;
+    }
+
+    public List<Morceau> rechercheAvancee(String recherche, String genre, String decennie, String tri) throws SQLException {
+        List<Morceau> resultats = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM morceau WHERE 1=1 ");
+        List<Object> parametres = new ArrayList<>();
+
+        if (recherche != null && !recherche.trim().isEmpty()) {
+            sql.append("AND titre ILIKE ? ");
+            parametres.add("%" + recherche.trim() + "%");
+        }
+
+        if (genre != null && !genre.equals("Tous les genres")) {
+            sql.append("AND genre = ? ");
+            parametres.add(genre);
+        }
+
+        if (decennie != null && !decennie.equals("Toutes les époques")) {
+            switch (decennie) {
+                case "Années 70":
+                    sql.append("AND date_sortie >= '1970-01-01' AND date_sortie <= '1979-12-31' ");
+                    break;
+                case "Années 80":
+                    sql.append("AND date_sortie >= '1980-01-01' AND date_sortie <= '1989-12-31' ");
+                    break;
+                case "Années 90":
+                    sql.append("AND date_sortie >= '1990-01-01' AND date_sortie <= '1999-12-31' ");
+                    break;
+                case "Années 2000+":
+                    sql.append("AND date_sortie >= '2000-01-01' ");
+                    break;
+            }
+        }
+
+        if (tri != null) {
+            switch (tri) {
+                case "Plus écoutés":
+                    sql.append("ORDER BY nb_ecoutes DESC ");
+                    break;
+                case "Plus récents":
+                    sql.append("ORDER BY date_sortie DESC ");
+                    break;
+                case "Plus anciens":
+                    sql.append("ORDER BY date_sortie ASC ");
+                    break;
+                default:
+                    sql.append("ORDER BY titre ASC ");
+            }
+        } else {
+            sql.append("ORDER BY titre ASC ");
+        }
+
+        try (PreparedStatement p = this.conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < parametres.size(); i++) {
+                p.setObject(i + 1, parametres.get(i));
+            }
+            ResultSet rs = p.executeQuery();
+            while (rs.next()) {
+                resultats.add(createMorceauFromsql(rs));
+            }
+        }
+        return resultats;
     }
 }

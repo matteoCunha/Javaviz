@@ -13,7 +13,6 @@ public class Group implements Consultable, Recherchable {
     private LocalDate dateCreation;
     private String description;
     private String name;
-    private ArtistRepository artistsRepo;
     private List<Artiste> artisteList;
 
     public Group(int id, LocalDate dateCreation, String description, String name) {

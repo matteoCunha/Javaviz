@@ -35,6 +35,7 @@ public class HomeViewController {
         tracksContainer.getChildren().clear();
         albumsContainer.getChildren().clear();
         artistsContainer.getChildren().clear();
+        groupContainer.getChildren().clear();
 
         for (int i = 1; i <= 3; i++) {
             VBox card = createMusicCard(null);

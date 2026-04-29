@@ -35,7 +35,7 @@ public class ArtistViewController {
         morceaux = morceauRepository.fetchTop5ByArtist(artiste);
         displayTopTracks(morceaux);
 
-        int n = 0;
+        long n = 0;
         for (Morceau m : morceaux) { n = n + m.getNb_ecoutes(); }
         listenerLabel.setText(n + " écoutes");
         descriptionLabel.setText(artiste.getDescription());

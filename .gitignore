@@ -31,3 +31,5 @@ bin/
 
 ### ENV ###
 .env
+
+README.txt

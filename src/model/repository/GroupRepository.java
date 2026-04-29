@@ -131,10 +131,12 @@ public class GroupRepository {
 
         ResultSet rs = p.executeQuery();
         List<Group> list = new ArrayList<>();
-        while(rs.next()) { list.add(createGroupFromsql(rs)); }
+        while(rs.next()) {
+            System.out.println("Groupe trouvé (ID " + rs.getInt("id") + "): \n\t-Pseudo : " + rs.getString("name")
+                     + "\n\t-Description : " + rs.getString("description"));
+            list.add(createGroupFromsql(rs));
+        }
 
         return list;
     }
 }
-
-//TODO : fonction update

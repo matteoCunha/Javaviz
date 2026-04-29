@@ -37,8 +37,8 @@ public class ArtistRepository {
             java.sql.Date sqlDate = rs.getDate("birth_date");
             LocalDate birthDate = (sqlDate != null) ? sqlDate.toLocalDate() : null;
 
-            System.out.println("Artiste trouvé (ID " + rs.getInt(1) + "): \n\t-Pseudo : " + rs.getString(2)
-                    +"\n\t-Date de naissance : " + birthDate + "\n\t-Description : " + rs.getString(3));
+            System.out.println("Artiste trouvé (ID " + rs.getInt("id") + "): \n\t-Pseudo : " + rs.getString("pseudo")
+                    +"\n\t-Date de naissance : " + birthDate + "\n\t-Description : " + rs.getString("description"));
             list.add(createArtistFromsql(rs));
             encore = rs.next();
         }
@@ -107,7 +107,6 @@ public class ArtistRepository {
 
     public void deleteArtiste(Artiste artiste) throws SQLException {
         boolean autoCommitPrecedent = this.conn.getAutoCommit();
-
         this.conn.setAutoCommit(false);
 
         try {

@@ -23,14 +23,8 @@ import java.util.Optional;
 
 public class MainController {
     Connection conn;
-    User utilisateur; // utilisation si besoin utilisation du polymorphisme pour le passer en Abonne, Visiteur ou admin
-    //DONE : Recherche et renvoyer les albums/artistes/morceaux etc FAIT
-    //DONE : ajouter d'autres morceaux albums et groupes (au moins 5 groupes de plus et 5 albums de plus)
-    //DONE : Pouvoir afficher l'historique d'écoute, a voir si sous forme de playlist, album on un autre view
-    //TODO : Ajouter les deux fonctions supplémentaire a voir quoi encore
-    //DONE : ajouter les nombre d'écoutes pour chaques morceaux pour les stats coté admin
-    //DONE : faire l'interface coté administrateur avec ajout/suppression de morceaux albums etc...
-    //TODO : ajouter un son lors du lancement d'une musique (peut être toujours le même) et un son non copyright
+    User utilisateur;
+
     @FXML private StackPane contentArea;
     @FXML private VBox sideMenu;
     @FXML private Label userLabel;
@@ -44,6 +38,7 @@ public class MainController {
     @FXML private Separator separatorAddPlay;
     @FXML private HBox visitorLimitContainer;
     @FXML private Label visitorLimitLabel;
+    @FXML private Button btnRechercheAvancee;
 
     public MainController() throws SQLException {
         this.conn = DatabaseConnection.getConnection();
@@ -342,6 +337,21 @@ public class MainController {
     }
 
     @FXML
+    private void showAdvancedSearch() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/AdvancedSearchView.fxml"));
+            Node vue = loader.load();
+
+            AdvancedSearchViewController controller = loader.getController();
+            controller.setMainController(this);
+            contentArea.getChildren().setAll(vue);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void showCreatePlaylist() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/CreatePlaylistView.fxml"));
@@ -433,16 +443,17 @@ public class MainController {
             playlistsContainer.getChildren().add(info);
             buttonAddPlay.setVisible(false);
             separatorAddPlay.setVisible(false);
+            btnRechercheAvancee.setVisible(false);
             if (btnHistorique != null) {
                 btnHistorique.setVisible(false);
             }
         } else if (utilisateur instanceof Abonne){
-
             Label titre = new Label("VOS PLAYLISTS");
             titre.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
             playlistsContainer.getChildren().add(titre);
             buttonAddPlay.setVisible(true);
             separatorAddPlay.setVisible(true);
+            btnRechercheAvancee.setVisible(true);
 
             if (btnHistorique != null) {
                 btnHistorique.setVisible(true);
@@ -488,20 +499,20 @@ public class MainController {
             Label titreAdmin = new Label("ADMINISTRATION");
             titreAdmin.setStyle("-fx-text-fill: #d32f2f; -fx-font-weight: bold; -fx-padding: 10 0 5 0;");
 
-            Button btnUsers = new Button("👥 Gestion Users");
+            Button btnUsers = new Button("Gestion Users");
             btnUsers.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
             btnUsers.setOnAction(e -> showAdminUsersView());
 
-            Button btnCatalog = new Button("🎵 Gestion Catalogue");
+            Button btnCatalog = new Button("Gestion Catalogue");
             btnCatalog.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
             btnCatalog.setOnAction(e -> showAdminCatalog());
 
-            Button btnStats = new Button("📊 Statistiques");
-            btnStats.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;");
+            Button btnStats = new Button("Statistiques");
+            btnStats.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
             btnStats.setOnAction(e -> showAdminStatsView());
 
-            Button btnAdvStats = new Button("🚀 Stats Évoluées");
-            btnAdvStats.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;");
+            Button btnAdvStats = new Button("Stats Évoluées");
+            btnAdvStats.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
             btnAdvStats.setOnAction(e -> showAdvancedStatsView());
 
             playlistsContainer.getChildren().addAll(titreAdmin, btnUsers, btnCatalog, btnStats, btnAdvStats);

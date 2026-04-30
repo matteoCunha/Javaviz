@@ -34,13 +34,12 @@ public class GroupViewController {
         this.mainController = main;
 
         groupNameLabel.setText(currentGroup.getName());
-        // monthlyListenersLabel.setText(artiste.getFollowers() + " abonnés");
 
         MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
         morceaux = morceauRepository.fetchTop5ByGroup(currentGroup);
         displayTopTracks(morceaux);
 
-        int n = 0;
+        long n = 0;
         for (Morceau m : morceaux) { n = n + m.getNb_ecoutes(); }
         listenerLabel.setText(n + " écoutes");
         descriptionLabel.setText(currentGroup.getDescription());

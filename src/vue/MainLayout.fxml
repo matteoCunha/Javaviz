@@ -51,6 +51,9 @@
                  style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"
                  visible="false"/>
 
+         <Button fx:id="btnRechercheAvancee" text="🔍 Explorer" onAction="#showAdvancedSearch"
+                 style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-cursor: hand;" />
+
          <Separator fx:id="separatorAddPlay" style="-fx-background-color: #282828;" />
 
          <VBox fx:id="playlistsContainer" spacing="10" />

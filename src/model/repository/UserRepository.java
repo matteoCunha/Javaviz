@@ -27,7 +27,6 @@ public class UserRepository {
             System.out.println("admin trouvé");
             return new Admin(pseudo, password, id);
         }
-
         return new Abonne(pseudo, password, id);
     }
 

@@ -1,6 +1,5 @@
 package controller;
 
-import com.sun.tools.javac.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -12,6 +11,10 @@ import model.music.Morceau;
 import model.music.SequenceDeMusique;
 import model.repository.MorceauRepository;
 import model.user.Abonne;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 
 import java.sql.SQLException;
 
@@ -25,6 +28,9 @@ public class PlayerViewController {
     @FXML private Slider timeSlider;
     @FXML private Button btnPrev;
     @FXML private Button btnNext;
+    @FXML private Slider volumeSlider;
+
+    private MediaPlayer mediaPlayer;
 
     private Morceau currentTrack;
     private SequenceDeMusique.Node  currentPlayingNode = null;
@@ -46,6 +52,14 @@ public class PlayerViewController {
 
         timeSlider.setDisable(true);
         actualiserBoutons();
+
+        volumeSlider.setMin(0);
+        volumeSlider.setMax(100);
+        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (mediaPlayer != null) {
+                mediaPlayer.setVolume(newVal.doubleValue() / 100.0);
+            }
+        });
     }
 
     public void jouerMorceau(Morceau morceau) throws SQLException {
@@ -61,6 +75,26 @@ public class PlayerViewController {
     }
 
     private void demarrerLecture(Morceau morceau) throws SQLException {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+
+        try {
+            String path = "src/music.mp3";
+            File audioFile = new File(path);
+            if (audioFile.exists()) {
+                Media media = new Media(audioFile.toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+
+                mediaPlayer.setVolume(volumeSlider.getValue() / 100.0);
+                mediaPlayer.play();
+            } else {
+                System.out.println("Fichier audio introuvable !");
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur de lecture audio : " + e.getMessage());
+        }
+
         this.currentTrack = morceau;
         this.tempsTotal = morceau.getTime();
         MorceauRepository morceauRepository = new MorceauRepository(mainController.conn);
@@ -118,10 +152,12 @@ public class PlayerViewController {
 
         if (isPlaying) {
             timeLine.pause();
+            if (mediaPlayer != null) mediaPlayer.pause();
             playPauseBtn.setText("▶");
             isPlaying = false;
         } else {
             timeLine.play();
+            if (mediaPlayer != null) mediaPlayer.play();
             playPauseBtn.setText("⏸");
             isPlaying = true;
         }
@@ -130,6 +166,7 @@ public class PlayerViewController {
     private void avancerTemps() {
         if (tempEcoule >= tempsTotal) {
             timeLine.stop();
+            if (mediaPlayer != null) mediaPlayer.stop();
 
             if (currentPlayingNode != null && currentPlayingNode.getNext() != null) {
                 try {

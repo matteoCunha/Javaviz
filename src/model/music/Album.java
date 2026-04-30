@@ -55,6 +55,7 @@ public class Album implements Consultable, Recherchable {
     public Artiste getArtiste() { return this.artiste; }
     public Group getGroup() { return this.group; }
 
+    @Override
     public String toString() {
         return this.name;
     }
@@ -106,5 +107,3 @@ Dans la base de donnée (index des colonnes commence à 1 pas a 0) :
 5 - artiste_id (peut être nul) soit un artiste, soit un groupe
 6 - group_id (peut être nul).
  */
-
-//TODO : idée pour les playlist garder les listes chainées (simple pour utiliser le bouton suivant/précédent plus tard dans l'inteface graphique) et utilisation de arrayLists pour les albums (rapide pour display avec une itération).

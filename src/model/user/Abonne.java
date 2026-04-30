@@ -25,7 +25,6 @@ public class Abonne extends CompteConnecte {
 
     public String getName() { return this.pseudo; }
 
-
     public void setPlaylist(List<Playlist> list) { this.playlist = list; }
 
     public List<Playlist> getPlaylists() { return this.playlist; }
@@ -42,6 +41,4 @@ public class Abonne extends CompteConnecte {
             p.updatePlaylist(this.playlist.get(i));
         }
     }
-
-    public String sePresenter() { return "Abonne -> name : " + this.getPseudo() + " - password : " + this.getPassword(); }
 }

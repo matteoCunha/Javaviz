@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" style="-fx-background-color: #121212;" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.AdvancedSearchViewController" stylesheets="@styles.css">
+
+    <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+    <Label text="Recherche Avancée" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher un titre..."
+                   style="-fx-background-color: #2a2a2a; -fx-text-fill: white; -fx-pref-width: 250; -fx-padding: 10; -fx-background-radius: 5;"/>
+
+        <ComboBox fx:id="genreCombo" promptText="Genre" style="-fx-background-color: #2a2a2a; -fx-text-fill: red;"/>
+        <ComboBox fx:id="periodeCombo" promptText="Époque" style="-fx-background-color: #2a2a2a; -fx-text-fill: white;"/>
+        <ComboBox fx:id="triCombo" promptText="Trier par" style="-fx-background-color: #2a2a2a; -fx-text-fill: white;"/>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <Button text="Réinitialiser" onAction="#resetFiltres"
+                style="-fx-background-color: transparent; -fx-text-fill: #b3b3b3; -fx-border-color: #b3b3b3; -fx-border-radius: 5; -fx-cursor: hand;"/>
+    </HBox>
+
+    <Label fx:id="resultCountLabel" text="0 résultat(s)" style="-fx-text-fill: #b3b3b3;"/>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #121212;" VBox.vgrow="ALWAYS">
+        <VBox fx:id="tracksContainer" spacing="5" />
+    </ScrollPane>
+
+</VBox>

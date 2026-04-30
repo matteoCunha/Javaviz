@@ -12,12 +12,12 @@ public class Morceau implements Recherchable {
     private Group group;
     private int temps;
     private String genre;
-    private int nb_ecoutes;
+    private long nb_ecoutes;
     private int numero_piste;
     private String titre;
     private int position;
 
-    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int n) {
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, long n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.artiste = artiste;
@@ -28,7 +28,7 @@ public class Morceau implements Recherchable {
         this.nb_ecoutes = n;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int position, int n) {
+    public Morceau(int id, LocalDate dateSortie, Artiste artiste, int temps, String titre,String genre, int numero_piste, int position, long n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.artiste = artiste;
@@ -40,7 +40,7 @@ public class Morceau implements Recherchable {
         this.nb_ecoutes = n;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int n) {
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, long n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.group = group;
@@ -51,7 +51,7 @@ public class Morceau implements Recherchable {
         this.nb_ecoutes = n;
     }
 
-    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int position, int n) {
+    public Morceau(int id, LocalDate dateSortie, Group group, int temps, String titre,String genre, int numero_piste, int position, long n) {
         this.id = id;
         this.dateSortie = dateSortie;
         this.group = group;
@@ -76,7 +76,7 @@ public class Morceau implements Recherchable {
     public int getPosition() { return this.position; }
     public void setPosition(int n) { this.position = n;}
 
-    public int getNb_ecoutes() { return nb_ecoutes; }
+    public long getNb_ecoutes() { return nb_ecoutes; }
 
     @Override
     public String toString() {
@@ -115,7 +115,6 @@ public class Morceau implements Recherchable {
         if (this.group != null) {
             return this.group.getId();
         }
-
         return 0;
     }
 }
